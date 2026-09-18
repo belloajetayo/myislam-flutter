@@ -15,6 +15,7 @@ import '../hajj/hajj_screen.dart';
 import '../donate/donate_screen.dart';
 import '../profile/profile_screen.dart';
 import '../tasbih/tasbih_screen.dart';
+import '../ai_companion/myislam_ai_floating_button.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -146,6 +147,15 @@ class _MainLayoutState extends State<MainLayout> {
                     onTabSelected: _handleBottomNavSelected,
                   ),
                 ],
+              ),
+            ),
+
+            // Floating MyIslam AI Companion & Guide Button
+            Positioned(
+              right: 16,
+              bottom: 120,
+              child: MyIslamAiFloatingButton(
+                onNavigate: _handleNavigate,
               ),
             ),
           ],

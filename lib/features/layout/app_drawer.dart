@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/services/storage_service.dart';
+import '../ai_companion/myislam_ai_sheet.dart';
 
 class AppDrawer extends StatefulWidget {
   final Function(String routeName) onNavigate;
@@ -80,6 +81,58 @@ class _AppDrawerState extends State<AppDrawer> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               children: [
+                // Highlighted MyIslam AI Companion Button
+                Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF064E3B), Color(0xFF065F46)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.goldWarm.withOpacity(0.6), width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.emeraldPrimary.withOpacity(0.25),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    dense: true,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.goldWarm, AppColors.emeraldLight],
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 18),
+                    ),
+                    title: const Text(
+                      "MyIslam AI Guide",
+                      style: TextStyle(
+                        color: AppColors.goldLight,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13.5,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      "Ask questions & explore app tour",
+                      style: TextStyle(color: Colors.white70, fontSize: 10.5),
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.goldWarm, size: 13),
+                    onTap: () {
+                      Navigator.pop(context);
+                      MyIslamAiSheet.show(context, onNavigate: widget.onNavigate);
+                    },
+                  ),
+                ),
+
                 _buildNavItem(
                   icon: Icons.home_rounded,
                   label: "Home",

@@ -5,6 +5,7 @@ import 'data/services/storage_service.dart';
 import 'data/services/prayer_service.dart';
 import 'data/services/quran_service.dart';
 import 'data/services/audio_service.dart';
+import 'features/ai_companion/islamic_ai_service.dart';
 import 'features/layout/main_layout.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ void main() async {
         ChangeNotifierProvider.value(value: prayerService),
         ChangeNotifierProvider.value(value: quranService),
         ChangeNotifierProvider(create: (_) => AudioService()),
+        ChangeNotifierProvider(create: (_) => IslamicAiService()),
       ],
       child: const MyIslamApp(),
     ),

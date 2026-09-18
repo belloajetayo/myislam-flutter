@@ -8,7 +8,6 @@ import 'widgets/progress_tracker_card.dart';
 import 'widgets/daily_cards_carousel.dart';
 import 'widgets/islamic_feed_card.dart';
 import 'widgets/islamic_calendar_card.dart';
-import 'widgets/mia_assistant_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function(String routeName) onNavigate;
@@ -184,53 +183,6 @@ class HomeScreen extends StatelessWidget {
               // Islamic Calendar Card
               const IslamicCalendarCard(),
             ],
-          ),
-        ),
-
-        // Floating MIA Assistant Button
-        Positioned(
-          bottom: 24,
-          right: 20,
-          child: GestureDetector(
-            onTap: () => MIAAssistantSheet.show(context),
-            child: Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF6366F1), Color(0xFF38BDF8)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF6366F1).withOpacity(0.45),
-                    blurRadius: 16,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 26),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF43F5E),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
       ],
