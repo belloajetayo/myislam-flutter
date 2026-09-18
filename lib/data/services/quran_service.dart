@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/quran_models.dart';
+import '../sources/quran_surahs_data.dart';
 
 class QuranService extends ChangeNotifier {
   List<Surah> _surahs = [];
   bool _isLoading = false;
   String? _error;
+  final Map<int, List<Ayah>> _ayahCache = {};
 
   List<Surah> get surahs => _surahs;
   bool get isLoading => _isLoading;
@@ -17,19 +19,8 @@ class QuranService extends ChangeNotifier {
   }
 
   void _loadInitialSurahs() {
-    // Standard initial surahs
-    _surahs = [
-      Surah(number: 1, name: "الفَاتِحة", englishName: "Al-Faatiha", englishNameTranslation: "The Opening", numberOfAyahs: 7, revelationType: "Meccan"),
-      Surah(number: 2, name: "البَقَرَة", englishName: "Al-Baqara", englishNameTranslation: "The Cow", numberOfAyahs: 286, revelationType: "Medinan"),
-      Surah(number: 3, name: "آل عِمرَان", englishName: "Aal-i-Imraan", englishNameTranslation: "The Family of Imraan", numberOfAyahs: 200, revelationType: "Medinan"),
-      Surah(number: 4, name: "النِّسَاء", englishName: "An-Nisaa", englishNameTranslation: "The Women", numberOfAyahs: 176, revelationType: "Medinan"),
-      Surah(number: 36, name: "يس", englishName: "Yaseen", englishNameTranslation: "Yaseen", numberOfAyahs: 83, revelationType: "Meccan"),
-      Surah(number: 55, name: "الرَّحْمَٰن", englishName: "Ar-Rahmaan", englishNameTranslation: "The Beneficent", numberOfAyahs: 78, revelationType: "Medinan"),
-      Surah(number: 67, name: "المُلْك", englishName: "Al-Mulk", englishNameTranslation: "The Sovereignty", numberOfAyahs: 30, revelationType: "Meccan"),
-      Surah(number: 112, name: "الإِخْلَاص", englishName: "Al-Ikhlaas", englishNameTranslation: "The Sincerity", numberOfAyahs: 4, revelationType: "Meccan"),
-      Surah(number: 113, name: "الفَلَق", englishName: "Al-Falaq", englishNameTranslation: "The Daybreak", numberOfAyahs: 5, revelationType: "Meccan"),
-      Surah(number: 114, name: "النَّاس", englishName: "An-Naas", englishNameTranslation: "Mankind", numberOfAyahs: 6, revelationType: "Meccan"),
-    ];
+    // Canonical full 114 Surahs available immediately offline
+    _surahs = List.from(QuranSurahsData.allSurahs);
   }
 
   Future<void> fetchAllSurahs() async {
@@ -54,7 +45,20 @@ class QuranService extends ChangeNotifier {
     }
   }
 
+  void prefetchAdjacentSurahs(int currentSurah) {
+    if (currentSurah > 1 && !_ayahCache.containsKey(currentSurah - 1)) {
+      fetchSurahAyahs(currentSurah - 1);
+    }
+    if (currentSurah < 114 && !_ayahCache.containsKey(currentSurah + 1)) {
+      fetchSurahAyahs(currentSurah + 1);
+    }
+  }
+
   Future<List<Ayah>> fetchSurahAyahs(int surahNumber) async {
+    if (_ayahCache.containsKey(surahNumber)) {
+      return _ayahCache[surahNumber]!;
+    }
+
     try {
       final response = await http.get(
         Uri.parse("https://api.alquran.cloud/v1/surah/$surahNumber/editions/quran-uthmani,en.sahih,en.transliteration"),
@@ -75,6 +79,7 @@ class QuranService extends ChangeNotifier {
             final tr = i < translitList.length ? translitList[i]['text'] : "";
             ayahs.add(Ayah.fromJson(ar, translation: en, transliteration: tr));
           }
+          _ayahCache[surahNumber] = ayahs;
           return ayahs;
         }
       }
@@ -88,7 +93,7 @@ class QuranService extends ChangeNotifier {
       Ayah(number: 4, text: "مَالِكِ يَوْمِ الدِّينِ", numberInSurah: 4, juz: 1, page: 1, translation: "Sovereign of the Day of Recompense.", transliteration: "Maaliki Yawmid-Deen"),
       Ayah(number: 5, text: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", numberInSurah: 5, juz: 1, page: 1, translation: "It is You we worship and You we ask for help.", transliteration: "Iyyaaka na'budu wa lyyaaka nasta'een"),
       Ayah(number: 6, text: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", numberInSurah: 6, juz: 1, page: 1, translation: "Guide us to the straight path -", transliteration: "Ihdinas-Siraatal-Mustaqeem"),
-      Ayah(number: 7, text: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", numberInSurah: 7, juz: 1, page: 1, translation: "The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger or of those who are astray.", transliteration: "Siraatal-lazeena an'amta 'alayhim ghayril-maghdoobi 'alayhim wa lad-daalleen"),
+      Ayah(number: 7, text: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", numberInSurah: 7, juz: 1, page: 1, translation: "The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger or of those who are astray.", transliteration: "Siraatal-lazeena an'amta 'alayhim غayril-maghdoobi 'alayhim wa lad-daalleen"),
     ];
   }
 }

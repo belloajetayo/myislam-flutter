@@ -14,6 +14,7 @@ class QuranMushafView extends StatefulWidget {
   final int initialPage;
   final MushafThemeMode themeMode;
   final ValueChanged<int>? onPageChanged;
+  final ValueChanged<int>? onSurahChanged;
   final Function(Ayah ayah)? onPlayAyah;
 
   const QuranMushafView({
@@ -23,6 +24,7 @@ class QuranMushafView extends StatefulWidget {
     this.initialPage = 1,
     this.themeMode = MushafThemeMode.madani,
     this.onPageChanged,
+    this.onSurahChanged,
     this.onPlayAyah,
   });
 
@@ -88,6 +90,26 @@ class _QuranMushafViewState extends State<QuranMushafView> {
   void _prevPage() {
     if (_currentPage > 1) {
       _jumpToPage(_currentPage - 1);
+    }
+  }
+
+  void _nextSurah() {
+    final currentSurahNum = MushafPageData.getPrimarySurahNumberForPage(_currentPage);
+    if (currentSurahNum < 114) {
+      final targetSurah = currentSurahNum + 1;
+      final targetPage = MushafPageData.surahStartPages[targetSurah] ?? _currentPage;
+      _jumpToPage(targetPage);
+      widget.onSurahChanged?.call(targetSurah);
+    }
+  }
+
+  void _prevSurah() {
+    final currentSurahNum = MushafPageData.getPrimarySurahNumberForPage(_currentPage);
+    if (currentSurahNum > 1) {
+      final targetSurah = currentSurahNum - 1;
+      final targetPage = MushafPageData.surahStartPages[targetSurah] ?? 1;
+      _jumpToPage(targetPage);
+      widget.onSurahChanged?.call(targetSurah);
     }
   }
 
@@ -373,6 +395,8 @@ class _QuranMushafViewState extends State<QuranMushafView> {
                 setState(() => _currentPage = page);
                 widget.onPageChanged?.call(page);
                 _transformController.value = Matrix4.identity();
+                final surahNum = MushafPageData.getPrimarySurahNumberForPage(page);
+                widget.onSurahChanged?.call(surahNum);
               },
               itemBuilder: (context, index) {
                 final pageNumber = index + 1;
@@ -641,6 +665,101 @@ class _QuranMushafViewState extends State<QuranMushafView> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // Surah Navigation Bar (Swipe ↔ or Tap to move to another Surah)
+                    GestureDetector(
+                      onHorizontalDragEnd: (details) {
+                        if (details.primaryVelocity != null) {
+                          if (details.primaryVelocity! < -150) {
+                            _nextSurah();
+                          } else if (details.primaryVelocity! > 150) {
+                            _prevSurah();
+                          }
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: _isDark ? AppColors.darkCardBg.withOpacity(0.95) : const Color(0xFFFDFBF7),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.islamicPurple.withOpacity(0.4), width: 1.2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(_isDark ? 0.3 : 0.05),
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: surahNum > 1 ? _prevSurah : null,
+                              borderRadius: BorderRadius.circular(10),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.arrow_back_ios_rounded, size: 12, color: surahNum > 1 ? AppColors.islamicGold : Colors.grey),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      surahNum > 1 ? (MushafPageData.surahNames[surahNum - 1] ?? "Prev") : "Start",
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        color: surahNum > 1 ? AppColors.islamicGold : Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppColors.islamicPurple.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.swap_horiz_rounded, size: 14, color: AppColors.islamicPurple),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "Surah $surahNum / 114 (Swipe ↔)",
+                                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.islamicPurple),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            InkWell(
+                              onTap: surahNum < 114 ? _nextSurah : null,
+                              borderRadius: BorderRadius.circular(10),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      surahNum < 114 ? (MushafPageData.surahNames[surahNum + 1] ?? "Next") : "End",
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        color: surahNum < 114 ? AppColors.islamicGold : Colors.grey,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Icon(Icons.arrow_forward_ios_rounded, size: 12, color: surahNum < 114 ? AppColors.islamicGold : Colors.grey),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     // Slider
                     SizedBox(
                       height: 28,
