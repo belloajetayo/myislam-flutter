@@ -321,9 +321,8 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
               ? QuranMushafView(
                   surah: widget.surah,
                   ayahs: _ayahs,
-                  fontSize: _fontSize,
+                  initialPage: _ayahs.isNotEmpty && _ayahs.first.page > 0 ? _ayahs.first.page : 1,
                   themeMode: _themeMode,
-                  currentlyPlayingAyah: _currentlyPlayingAyah,
                   onPlayAyah: _playSpecificAyah,
                 )
               : _buildTranslationListView(isDark),
