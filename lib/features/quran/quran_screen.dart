@@ -4,6 +4,7 @@ import '../../core/constants/app_colors.dart';
 import '../../data/models/quran_models.dart';
 import '../../data/services/quran_service.dart';
 import '../../data/sources/local_hadiths_data.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'surah_reader_screen.dart';
 
 class QuranScreen extends StatefulWidget {
@@ -238,16 +239,26 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
   }
 
   Widget _buildSurahTile(Surah surah, bool isDark) {
+    final isMeccan = surah.revelationType.toLowerCase().contains("meccan");
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         onTap: () {
           Navigator.push(
             context,
@@ -255,26 +266,55 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
           );
         },
         leading: Container(
-          width: 38,
-          height: 38,
+          width: 44,
+          height: 44,
           decoration: BoxDecoration(
-            color: AppColors.islamicGold.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(12),
+            gradient: isMeccan
+                ? const LinearGradient(colors: [Color(0xFF065F46), Color(0xFF047857)])
+                : const LinearGradient(colors: [Color(0xFFB45309), Color(0xFFD97706)]),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: (isMeccan ? AppColors.emeraldPrimary : AppColors.goldWarm).withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           alignment: Alignment.center,
           child: Text(
             "${surah.number}",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.islamicGold),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
           ),
         ),
-        title: Text(surah.englishName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+        title: Row(
+          children: [
+            Text(surah.englishName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                isMeccan ? "🕋 Makkah" : "🕌 Madinah",
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
         subtitle: Text(
-          "${surah.revelationType} • ${surah.numberOfAyahs} Ayahs",
+          "${surah.englishNameTranslation} • ${surah.numberOfAyahs} Verses",
           style: const TextStyle(fontSize: 11, color: Colors.grey),
         ),
         trailing: Text(
           surah.name,
-          style: const TextStyle(fontFamily: 'Amiri', fontSize: 18, fontWeight: FontWeight.bold),
+          style: GoogleFonts.amiri(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: isDark ? AppColors.goldLight : AppColors.goldOchre,
+          ),
         ),
       ),
     );

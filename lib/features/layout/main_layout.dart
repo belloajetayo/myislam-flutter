@@ -14,6 +14,7 @@ import '../fasting/fasting_screen.dart';
 import '../hajj/hajj_screen.dart';
 import '../donate/donate_screen.dart';
 import '../profile/profile_screen.dart';
+import '../tasbih/tasbih_screen.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -81,6 +82,8 @@ class _MainLayoutState extends State<MainLayout> {
           return DonateScreen(onBack: () => setState(() => _activeSubRoute = null));
         case "profile":
           return ProfileScreen(onBack: () => setState(() => _activeSubRoute = null));
+        case "tasbih":
+          return TasbihScreen(onBack: () => setState(() => _activeSubRoute = null));
       }
     }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/sources/local_hadiths_data.dart';
@@ -136,12 +137,12 @@ class _DailyCardsCarouselState extends State<DailyCardsCarousel> {
                     child: Text(
                       currentData["arabic"]!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Amiri',
+                      textDirection: TextDirection.rtl,
+                      style: GoogleFonts.amiriQuran(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        height: 1.6,
+                        height: 1.8,
                       ),
                     ),
                   ),

@@ -168,6 +168,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
 
                 if (_islamicToolsExpanded) ...[
+                  _buildSubItem("Digital Tasbih", Icons.fingerprint_rounded, [0xFF059669, 0xFF10B981], () {
+                    Navigator.pop(context);
+                    widget.onNavigate("tasbih");
+                  }),
                   _buildSubItem("Duas Library", Icons.bookmark_rounded, [0xFF14B8A6, 0xFF10B981], () {
                     Navigator.pop(context);
                     widget.onNavigate("duas");

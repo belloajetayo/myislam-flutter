@@ -9,8 +9,8 @@ class AppTheme {
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.lightBgEnd,
       colorScheme: const ColorScheme.light(
-        primary: AppColors.islamicGold,
-        secondary: AppColors.islamicIndigo,
+        primary: AppColors.emeraldPrimary,
+        secondary: AppColors.goldWarm,
         surface: AppColors.lightCardBg,
         onSurface: AppColors.lightTextPrimary,
         error: Color(0xFFEF4444),
@@ -58,8 +58,8 @@ class AppTheme {
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.darkBgStart,
       colorScheme: const ColorScheme.dark(
-        primary: AppColors.islamicGold,
-        secondary: AppColors.islamicIndigo,
+        primary: AppColors.emeraldLight,
+        secondary: AppColors.goldWarm,
         surface: AppColors.darkCardBg,
         onSurface: AppColors.darkTextPrimary,
         error: Color(0xFFEF4444),

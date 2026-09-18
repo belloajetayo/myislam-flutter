@@ -1,32 +1,70 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 
-class QuickShortcuts extends StatefulWidget {
+class QuickShortcuts extends StatelessWidget {
   final Function(String routeName) onNavigate;
 
   const QuickShortcuts({super.key, required this.onNavigate});
 
-  @override
-  State<QuickShortcuts> createState() => _QuickShortcutsState();
-}
-
-class _QuickShortcutsState extends State<QuickShortcuts> {
-  bool _isExpanded = false;
-
-  final List<Map<String, dynamic>> _primaryShortcuts = [
-    {"label": "Quran", "icon": Icons.menu_book_rounded, "gradient": AppColors.quranGradient, "route": "quran"},
-    {"label": "Salat", "icon": Icons.access_time_filled_rounded, "gradient": AppColors.salatGradient, "route": "prayer"},
-    {"label": "Zakat", "icon": Icons.volunteer_activism_rounded, "gradient": AppColors.zakatGradient, "route": "zakat"},
-    {"label": "Sawm", "icon": Icons.nightlight_round, "gradient": AppColors.sawmGradient, "route": "fasting"},
-    {"label": "Hajj", "icon": Icons.location_on_rounded, "gradient": AppColors.hajjGradient, "route": "hajj"},
-  ];
-
-  final List<Map<String, dynamic>> _extraShortcuts = [
-    {"label": "Duas", "icon": Icons.bookmark_rounded, "gradient": [0xFF14B8A6, 0xFF06B6D4], "route": "duas"},
-    {"label": "Qiblah", "icon": Icons.explore_rounded, "gradient": [0xFF22C55E, 0xFF059669], "route": "qiblah"},
-    {"label": "Radio", "icon": Icons.headphones_rounded, "gradient": [0xFF3B82F6, 0xFF1D4ED8], "route": "podcasts"},
-    {"label": "Donate", "icon": Icons.favorite_rounded, "gradient": [0xFFEF4444, 0xFFF43F5E], "route": "donate"},
-    {"label": "Profile", "icon": Icons.person_rounded, "gradient": [0xFF64748B, 0xFF475569], "route": "profile"},
+  static final List<Map<String, dynamic>> _tools = [
+    {
+      "label": "Quran",
+      "arabic": "القرآن",
+      "icon": Icons.menu_book_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFF047857), Color(0xFF065F46)]),
+      "route": "quran",
+      "badge": "Mushaf",
+    },
+    {
+      "label": "Tasbih",
+      "arabic": "السبحة",
+      "icon": Icons.fingerprint_rounded,
+      "gradient": AppColors.tasbihGradient,
+      "route": "tasbih",
+      "badge": "Dhikr",
+    },
+    {
+      "label": "Duas",
+      "arabic": "الأدعية",
+      "icon": Icons.bookmark_added_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFF0D9488), Color(0xFF14B8A6)]),
+      "route": "duas",
+    },
+    {
+      "label": "Qiblah",
+      "arabic": "القبلة",
+      "icon": Icons.explore_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFFD97706), Color(0xFFF59E0B)]),
+      "route": "qiblah",
+    },
+    {
+      "label": "Prayers",
+      "arabic": "الصلوات",
+      "icon": Icons.access_time_filled_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFF0284C7), Color(0xFF0EA5E9)]),
+      "route": "prayer",
+    },
+    {
+      "label": "Fasting",
+      "arabic": "الصيام",
+      "icon": Icons.nightlight_round,
+      "gradient": const LinearGradient(colors: [Color(0xFF7C3AED), Color(0xFF8B5CF6)]),
+      "route": "fasting",
+    },
+    {
+      "label": "Zakat",
+      "arabic": "الزكاة",
+      "icon": Icons.volunteer_activism_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFFEA580C), Color(0xFFF97316)]),
+      "route": "zakat",
+    },
+    {
+      "label": "Radio",
+      "arabic": "إذاعة",
+      "icon": Icons.headphones_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFF2563EB), Color(0xFF3B82F6)]),
+      "route": "podcasts",
+    },
   ];
 
   @override
@@ -38,177 +76,136 @@ class _QuickShortcutsState extends State<QuickShortcuts> {
       children: [
         // Title Row
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Pillars of Islam",
+              "Islamic Utilities",
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
+                letterSpacing: -0.2,
                 color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Container(
-                height: 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.islamicIndigo.withOpacity(0.4),
-                      Colors.transparent,
-                    ],
-                  ),
-                ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: AppColors.emeraldPrimary.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                "Muslim Pro Suite",
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.emeraldPrimary),
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
 
-        // Primary 5 Columns
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: _primaryShortcuts.map((s) => _buildShortcutItem(
-            label: s["label"] as String,
-            icon: s["icon"] as IconData,
-            gradient: s["gradient"] as LinearGradient,
-            route: s["route"] as String,
-            isDark: isDark,
-          )).toList(),
-        ),
+        // 8-Tool Grid (2 rows of 4)
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: _tools.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 10,
+            childAspectRatio: 0.85,
+          ),
+          itemBuilder: (context, index) {
+            final tool = _tools[index];
+            final gradient = tool["gradient"] as LinearGradient;
+            final badge = tool["badge"] as String?;
 
-        // More / Less Toggle Button
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
-              },
-              borderRadius: BorderRadius.circular(20),
+            return GestureDetector(
+              onTap: () => onNavigate(tool["route"] as String),
+              behavior: HitTestBehavior.opaque,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0x336366F1) : const Color(0xFFEEF2FF),
+                  color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: isDark ? const Color(0x556366F1) : const Color(0xFFC7D2FE),
+                    color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _isExpanded ? "Less" : "More",
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.islamicIndigo,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      _isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
-                      size: 16,
-                      color: AppColors.islamicIndigo,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-
-        // Expanded Extra Shortcuts
-        AnimatedCrossFade(
-          duration: const Duration(milliseconds: 250),
-          crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-          firstChild: const SizedBox.shrink(),
-          secondChild: Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: _extraShortcuts.map((s) {
-                final colors = (s["gradient"] as List<int>).map((c) => Color(c)).toList();
-                return _buildShortcutItem(
-                  label: s["label"] as String,
-                  icon: s["icon"] as IconData,
-                  gradient: LinearGradient(colors: colors, begin: Alignment.topLeft, end: Alignment.bottomRight),
-                  route: s["route"] as String,
-                  isDark: isDark,
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildShortcutItem({
-    required String label,
-    required IconData icon,
-    required LinearGradient gradient,
-    required String route,
-    required bool isDark,
-  }) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => widget.onNavigate(route),
-        behavior: HitTestBehavior.opaque,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 2),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-          decoration: BoxDecoration(
-            color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  gradient: gradient,
-                  borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: gradient.colors.first.withOpacity(0.35),
+                      color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
                       blurRadius: 8,
-                      offset: const Offset(0, 3),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
-                child: Icon(icon, color: Colors.white, size: 20),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            gradient: gradient,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: gradient.colors.first.withOpacity(0.35),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Icon(tool["icon"] as IconData, color: Colors.white, size: 22),
+                        ),
+                        if (badge != null)
+                          Positioned(
+                            top: -4,
+                            right: -6,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                              decoration: BoxDecoration(
+                                gradient: AppColors.goldGradient,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.white, width: 1),
+                              ),
+                              child: Text(
+                                badge,
+                                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 7),
+                    Text(
+                      tool["label"] as String,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      tool["arabic"] as String,
+                      style: TextStyle(
+                        fontFamily: 'Amiri',
+                        fontSize: 10,
+                        color: isDark ? Colors.white54 : Colors.grey,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            );
+          },
         ),
-      ),
+      ],
     );
   }
 }
