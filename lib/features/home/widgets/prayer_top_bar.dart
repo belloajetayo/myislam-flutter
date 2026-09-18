@@ -32,7 +32,7 @@ class PrayerTopBar extends StatelessWidget {
         return AppColors.maghribDuskGradient;
       case "isha":
       default:
-        return isDark ? AppColors.ishaNightGradient : AppColors.emeraldHeroGradient;
+        return isDark ? AppColors.purpleGoldHeroGradient : AppColors.purpleGoldShiningGradient;
     }
   }
 

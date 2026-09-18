@@ -89,10 +89,10 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
     return Container(
       height: sheetHeight,
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F172A) : Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
           width: 1.5,
         ),
         boxShadow: [
@@ -168,8 +168,8 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
-              ? [const Color(0xFF064E3B).withOpacity(0.4), Colors.transparent]
-              : [const Color(0xFFECFDF5), Colors.white],
+              ? [const Color(0xFF2E1065).withOpacity(0.4), Colors.transparent]
+              : [const Color(0xFFF3E8FF), Colors.white],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -194,15 +194,11 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.goldWarm, AppColors.emeraldPrimary],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  gradient: AppColors.purpleGoldShiningGradient,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.goldWarm.withOpacity(0.35),
+                      color: AppColors.islamicGold.withOpacity(0.4),
                       blurRadius: 12,
                       offset: const Offset(0, 3),
                     ),
@@ -226,21 +222,21 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.emeraldPrimary.withOpacity(0.18),
+                            color: AppColors.islamicGold.withOpacity(0.18),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.emeraldPrimary.withOpacity(0.4)),
+                            border: Border.all(color: AppColors.islamicGold.withOpacity(0.4)),
                           ),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.circle, color: AppColors.emeraldLight, size: 6),
+                              Icon(Icons.circle, color: AppColors.islamicGold, size: 6),
                               SizedBox(width: 4),
                               Text(
                                 "Guide & Sunnah",
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.emeraldPrimary,
+                                  color: AppColors.islamicGold,
                                 ),
                               ),
                             ],
@@ -332,10 +328,8 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
               width: 30,
               height: 30,
               margin: const EdgeInsets.only(right: 8, top: 2),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.goldWarm, AppColors.emeraldPrimary],
-                ),
+              decoration: const BoxDecoration(
+                gradient: AppColors.purpleGoldShiningGradient,
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
@@ -347,8 +341,8 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: isUser
-                    ? AppColors.emeraldPrimary
-                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC)),
+                    ? AppColors.islamicPurple
+                    : (isDark ? AppColors.darkCardBg : const Color(0xFFF8FAFC)),
                 borderRadius: BorderRadius.circular(20).copyWith(
                   bottomRight: isUser ? const Radius.circular(4) : null,
                   bottomLeft: !isUser ? const Radius.circular(4) : null,
@@ -356,7 +350,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                 border: isUser
                     ? null
                     : Border.all(
-                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                        color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
                       ),
                 boxShadow: [
                   BoxShadow(
@@ -463,7 +457,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
             height: 30,
             margin: const EdgeInsets.only(right: 8),
             decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [AppColors.goldWarm, AppColors.emeraldPrimary]),
+              gradient: AppColors.purpleGoldShiningGradient,
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 14),
@@ -471,18 +465,18 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+              color: isDark ? AppColors.darkCardBg : const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.circular(18),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 14,
                   height: 14,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.goldWarm,
+                    color: AppColors.islamicGold,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -502,10 +496,10 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F172A) : Colors.white,
+        color: isDark ? AppColors.darkSurface : Colors.white,
         border: Border(
           top: BorderSide(
-            color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+            color: isDark ? AppColors.darkBorder : const Color(0xFFF1F5F9),
           ),
         ),
       ),
@@ -521,23 +515,23 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                   hintText: "Ask anything about Quran, Duas, or the app...",
                   hintStyle: TextStyle(fontSize: 12.5, color: isDark ? Colors.white38 : Colors.grey[500]),
                   filled: true,
-                  fillColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+                  fillColor: isDark ? AppColors.darkCardBg : const Color(0xFFF8FAFC),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: BorderSide(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                      color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: BorderSide(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                      color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
-                    borderSide: const BorderSide(color: AppColors.emeraldPrimary, width: 1.5),
+                    borderSide: const BorderSide(color: AppColors.islamicGold, width: 1.5),
                   ),
                 ),
               ),
@@ -547,9 +541,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
               width: 44,
               height: 44,
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.emeraldPrimary, Color(0xFF047857)],
-                ),
+                gradient: AppColors.purpleGoldShiningGradient,
                 shape: BoxShape.circle,
               ),
               child: IconButton(
@@ -564,7 +556,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
   }
 
   Widget _buildGuideTab(bool isDark) {
-    final features = IslamicAiService.appFeatures;
+    const features = IslamicAiService.appFeatures;
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -575,10 +567,10 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
           margin: const EdgeInsets.only(bottom: 16),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : Colors.white,
+            color: isDark ? AppColors.darkCardBg : Colors.white,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
-              color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
             ),
             boxShadow: [
               BoxShadow(
@@ -616,7 +608,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.emeraldPrimary,
+                      backgroundColor: AppColors.islamicPurple,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -660,7 +652,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.check_circle_rounded, color: AppColors.emeraldPrimary, size: 12),
+                        const Icon(Icons.check_circle_rounded, color: AppColors.islamicGold, size: 12),
                         const SizedBox(width: 4),
                         Text(h, style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w500)),
                       ],
@@ -720,10 +712,10 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
           margin: const EdgeInsets.only(bottom: 16),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E293B) : Colors.white,
+            color: isDark ? AppColors.darkCardBg : Colors.white,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
-              color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
             ),
           ),
           child: Column(
@@ -781,7 +773,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                 alignment: Alignment.centerRight,
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.emeraldPrimary,
+                    backgroundColor: AppColors.islamicPurple,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),

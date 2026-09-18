@@ -11,7 +11,7 @@ class QuickShortcuts extends StatelessWidget {
       "label": "Quran",
       "arabic": "القرآن",
       "icon": Icons.menu_book_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFF047857), Color(0xFF065F46)]),
+      "gradient": AppColors.purpleGoldShiningGradient,
       "route": "quran",
       "badge": "Mushaf",
     },
@@ -90,12 +90,12 @@ class QuickShortcuts extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                color: AppColors.emeraldPrimary.withOpacity(0.12),
+                color: AppColors.islamicPurple.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Text(
-                "Muslim Pro Suite",
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.emeraldPrimary),
+                "MyIslam Suite",
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.islamicPurple),
               ),
             ),
           ],

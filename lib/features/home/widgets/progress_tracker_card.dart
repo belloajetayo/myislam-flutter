@@ -46,10 +46,10 @@ class ProgressTrackerCard extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: AppColors.emeraldPrimary.withOpacity(0.15),
+                      color: AppColors.islamicGold.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Icons.check_circle_rounded, color: AppColors.emeraldPrimary, size: 18),
+                    child: const Icon(Icons.check_circle_rounded, color: AppColors.islamicGold, size: 18),
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -107,7 +107,7 @@ class ProgressTrackerCard extends StatelessWidget {
               value: progressPct,
               minHeight: 6,
               backgroundColor: isDark ? Colors.white10 : const Color(0xFFE2E8F0),
-              color: AppColors.emeraldPrimary,
+              color: AppColors.islamicGold,
             ),
           ),
 
@@ -128,12 +128,12 @@ class ProgressTrackerCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       color: isDone
-                          ? (isDark ? AppColors.emeraldForest.withOpacity(0.3) : const Color(0xFFECFDF5))
+                          ? (isDark ? AppColors.islamicPurple.withOpacity(0.25) : const Color(0xFFFAF5FF))
                           : (isDark ? Colors.white.withOpacity(0.04) : const Color(0xFFF8FAFC)),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
                         color: isDone
-                            ? AppColors.emeraldPrimary
+                            ? AppColors.islamicPurple
                             : (isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
                         width: isDone ? 1.5 : 1,
                       ),
@@ -147,9 +147,9 @@ class ProgressTrackerCard extends StatelessWidget {
                           height: 22,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isDone ? AppColors.emeraldPrimary : Colors.transparent,
+                            color: isDone ? AppColors.islamicPurple : Colors.transparent,
                             border: Border.all(
-                              color: isDone ? AppColors.emeraldPrimary : Colors.grey.shade400,
+                              color: isDone ? AppColors.islamicPurple : Colors.grey.shade400,
                               width: 1.5,
                             ),
                           ),
@@ -164,7 +164,7 @@ class ProgressTrackerCard extends StatelessWidget {
                             fontSize: 11,
                             fontWeight: isDone ? FontWeight.bold : FontWeight.w600,
                             color: isDone
-                                ? AppColors.emeraldPrimary
+                                ? AppColors.islamicPurple
                                 : (isDark ? Colors.white70 : AppColors.lightTextPrimary),
                           ),
                         ),

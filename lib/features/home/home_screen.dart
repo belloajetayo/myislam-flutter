@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/shining_brand_title.dart';
 import '../../data/services/storage_service.dart';
 import 'widgets/prayer_top_bar.dart';
 import 'widgets/quick_shortcuts.dart';
@@ -89,34 +90,10 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // App Brand Title
-                  Row(
-                    children: [
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: AppColors.goldGradient,
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: Image.asset(
-                          "assets/images/logo.png",
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => const Icon(Icons.mosque_rounded, color: Colors.white, size: 18),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "MyIslam",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -0.5,
-                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        ),
-                      ),
-                    ],
+                  // App Brand Title - Shining Purple Gold Gradient (No logo)
+                  const ShiningBrandTitle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
                   ),
 
                   // Dark Mode Switch Button

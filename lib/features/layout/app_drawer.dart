@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/shining_brand_title.dart';
 import '../../data/services/storage_service.dart';
 import '../ai_companion/myislam_ai_sheet.dart';
 
@@ -22,55 +23,33 @@ class _AppDrawerState extends State<AppDrawer> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Drawer(
-      backgroundColor: isDark ? const Color(0xFF0F0C29) : Colors.white,
+      backgroundColor: isDark ? AppColors.darkBgStart : Colors.white,
       child: Column(
         children: [
           // Gradient Header
           Container(
             width: double.infinity,
             padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 20, 20, 24),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF4F46E5), Color(0xFF3B82F6), Color(0xFF0EA5E9)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration: BoxDecoration(
+              gradient: isDark
+                  ? AppColors.purpleGoldHeroGradient
+                  : const LinearGradient(
+                      colors: [Color(0xFF2E1A47), Color(0xFF4A2875), Color(0xFF1F1133)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
             ),
-            child: Row(
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white38, width: 1),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const Icon(Icons.mosque_rounded, color: Colors.white, size: 28),
-                  ),
+                ShiningBrandTitle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
                 ),
-                const SizedBox(width: 14),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "MyIslam",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    Text(
-                      "Assalamu Alaikum 🌙",
-                      style: TextStyle(color: Color(0xFFDBEAFE), fontSize: 12),
-                    ),
-                  ],
+                SizedBox(height: 4),
+                Text(
+                  "Assalamu Alaikum 🌙 • Your Islamic Companion",
+                  style: TextStyle(color: Color(0xFFE9D5FF), fontSize: 11.5),
                 ),
               ],
             ),
@@ -86,15 +65,15 @@ class _AppDrawerState extends State<AppDrawer> {
                   margin: const EdgeInsets.only(bottom: 8),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF064E3B), Color(0xFF065F46)],
+                      colors: [Color(0xFF2E1065), Color(0xFF1E1B4B)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.goldWarm.withOpacity(0.6), width: 1.2),
+                    border: Border.all(color: AppColors.islamicGold.withOpacity(0.6), width: 1.2),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.emeraldPrimary.withOpacity(0.25),
+                        color: AppColors.islamicPurple.withOpacity(0.25),
                         blurRadius: 10,
                         offset: const Offset(0, 3),
                       ),
@@ -106,9 +85,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       width: 36,
                       height: 36,
                       decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [AppColors.goldWarm, AppColors.emeraldLight],
-                        ),
+                        gradient: AppColors.purpleGoldShiningGradient,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 18),

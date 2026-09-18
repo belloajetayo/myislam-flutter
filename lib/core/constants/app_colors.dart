@@ -1,33 +1,60 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Brand Islamic Colors
+  // Brand Islamic Colors - Purple & Gold Signature (myislam2.vercel.app)
   static const Color islamicGold = Color(0xFFF59E0B);
+  static const Color islamicGoldLight = Color(0xFFFBBF24);
   static const Color islamicGoldDark = Color(0xFFD97706);
+  static const Color islamicPurple = Color(0xFF8B5CF6);
+  static const Color islamicPurpleDeep = Color(0xFF7E22CE);
+  static const Color islamicPurpleDark = Color(0xFF6D28D9);
   static const Color islamicGreen = Color(0xFF10B981);
   static const Color islamicTeal = Color(0xFF0D9488);
   static const Color islamicIndigo = Color(0xFF6366F1);
-  static const Color islamicPurple = Color(0xFF8B5CF6);
   static const Color islamicRose = Color(0xFFF43F5E);
   static const Color islamicSky = Color(0xFF0EA5E9);
 
-  // Dark Mode Palette
-  static const Color darkBgStart = Color(0xFF0F0C29);
-  static const Color darkBgMid = Color(0xFF1A1A4E);
-  static const Color darkBgEnd = Color(0xFF0F2027);
-  static const Color darkCardBg = Color(0x1AFFFFFF);
-  static const Color darkBorder = Color(0x336366F1);
-  static const Color darkTextPrimary = Color(0xFFF8FAFC);
-  static const Color darkTextSecondary = Color(0xFF94A3B8);
+  // Dark Mode Palette (myislam2 deep violet-black: hsl(240 15% 6%))
+  static const Color darkBgStart = Color(0xFF0C0A17);
+  static const Color darkBgMid = Color(0xFF15102A);
+  static const Color darkBgEnd = Color(0xFF0C0A17);
+  static const Color darkCardBg = Color(0xFF18142E);
+  static const Color darkSurface = Color(0xFF18142E);
+  static const Color darkBorder = Color(0xFF2C254C);
+  static const Color darkTextPrimary = Color(0xFFFAF7F2);
+  static const Color darkTextSecondary = Color(0xFF9E97B8);
 
-  // Light Mode Palette
-  static const Color lightBgStart = Color(0xFFEEF2FF);
-  static const Color lightBgMid = Color(0xFFF0F9FF);
-  static const Color lightBgEnd = Color(0xFFF8FAFC);
+  // Light Mode Palette (myislam2 warm cream-ivory: hsl(40 30% 98%))
+  static const Color lightBgStart = Color(0xFFFDFBF7);
+  static const Color lightBgMid = Color(0xFFF8F4EE);
+  static const Color lightBgEnd = Color(0xFFF4ECE1);
   static const Color lightCardBg = Colors.white;
-  static const Color lightBorder = Color(0xFFE2E8F0);
-  static const Color lightTextPrimary = Color(0xFF0F172A);
-  static const Color lightTextSecondary = Color(0xFF64748B);
+  static const Color lightSurface = Colors.white;
+  static const Color lightBorder = Color(0xFFEADBCE);
+  static const Color lightTextPrimary = Color(0xFF1E1B2E);
+  static const Color lightTextSecondary = Color(0xFF68607A);
+
+  // Shining Purple-Gold Brand Gradient (Signature from myislam2.vercel.app)
+  static const LinearGradient purpleGoldShiningGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFFFBBF24), // Shining Gold
+      Color(0xFFF59E0B), // Warm Amber
+      Color(0xFFA855F7), // Royal Violet
+      Color(0xFF7E22CE), // Deep Purple
+    ],
+  );
+
+  static const LinearGradient purpleGoldHeroGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF241544),
+      Color(0xFF381F66),
+      Color(0xFF1C0E36),
+    ],
+  );
 
   // Gradients
   static const LinearGradient darkBackgroundGradient = LinearGradient(

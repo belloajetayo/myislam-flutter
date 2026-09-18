@@ -27,10 +27,10 @@ class CustomBottomNavigation extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF131131) : Colors.white,
+        color: isDark ? AppColors.darkCardBg : Colors.white,
         borderRadius: BorderRadius.circular(32),
         border: Border.all(
-          color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFF1F5F9),
+          color: isDark ? AppColors.darkBorder : const Color(0xFFEADBCE),
         ),
         boxShadow: [
           BoxShadow(
@@ -56,17 +56,13 @@ class CustomBottomNavigation extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
                   gradient: isSelected
-                      ? const LinearGradient(
-                          colors: [AppColors.islamicIndigo, Color(0xFF9333EA)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
+                      ? AppColors.purpleGoldShiningGradient
                       : null,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: AppColors.islamicIndigo.withOpacity(0.35),
+                            color: const Color(0xFF7E22CE).withOpacity(0.35),
                             blurRadius: 10,
                             offset: const Offset(0, 3),
                           )

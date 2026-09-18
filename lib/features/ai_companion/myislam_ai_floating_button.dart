@@ -60,15 +60,15 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF064E3B), Color(0xFF065F46)],
+                  colors: [Color(0xFF2E1065), Color(0xFF1E1B4B)],
                 ),
                 borderRadius: BorderRadius.circular(16).copyWith(
                   bottomRight: const Radius.circular(2),
                 ),
-                border: Border.all(color: AppColors.goldWarm.withOpacity(0.6), width: 1.2),
+                border: Border.all(color: AppColors.islamicGold.withOpacity(0.6), width: 1.2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
+                    color: Colors.black.withOpacity(0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),
@@ -79,14 +79,14 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
                 children: [
                   const Text("✨", style: TextStyle(fontSize: 13)),
                   const SizedBox(width: 6),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text(
                         "MyIslam AI Guide",
                         style: TextStyle(
-                          color: AppColors.goldLight,
+                          color: AppColors.islamicGold,
                           fontSize: 11.5,
                           fontWeight: FontWeight.bold,
                         ),
@@ -119,13 +119,13 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.goldWarm.withOpacity(0.4),
+                      color: AppColors.islamicGold.withOpacity(0.45),
                       blurRadius: 16 * _pulseAnimation.value,
                       spreadRadius: 2 * _pulseAnimation.value,
                     ),
                     BoxShadow(
-                      color: AppColors.emeraldPrimary.withOpacity(0.3),
-                      blurRadius: 10,
+                      color: AppColors.islamicPurple.withOpacity(0.4),
+                      blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ],
@@ -144,15 +144,7 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
                 width: 54,
                 height: 54,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFFFBBF24), // Vibrant gold
-                      Color(0xFFD97706), // Royal amber
-                      Color(0xFF047857), // Emerald
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  gradient: AppColors.purpleGoldShiningGradient,
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white.withOpacity(0.85), width: 2),
                 ),
@@ -171,16 +163,16 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF064E3B),
+                          color: const Color(0xFF2E1065),
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: AppColors.goldWarm, width: 0.8),
+                          border: Border.all(color: AppColors.islamicGold, width: 0.8),
                         ),
                         child: const Text(
                           "AI",
                           style: TextStyle(
                             fontSize: 8,
                             fontWeight: FontWeight.w900,
-                            color: AppColors.goldLight,
+                            color: AppColors.islamicGold,
                             letterSpacing: 0.5,
                           ),
                         ),
