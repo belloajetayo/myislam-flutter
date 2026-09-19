@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/animated_back_button.dart';
 import '../../data/services/storage_service.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -27,21 +28,7 @@ class ProfileScreen extends StatelessWidget {
           // Header Bar
           Row(
             children: [
-              GestureDetector(
-                onTap: onBack,
-                child: Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.white.withOpacity(0.08) : Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
-                    ),
-                  ),
-                  child: const Icon(Icons.arrow_back_rounded, size: 20),
-                ),
-              ),
+              AnimatedBackButton(onPressed: onBack),
               const SizedBox(width: 14),
               const Text(
                 "Profile & Progress",
@@ -207,6 +194,46 @@ class ProfileScreen extends StatelessWidget {
               value: storage.darkMode,
               activeColor: AppColors.islamicGold,
               onChanged: (_) => storage.toggleDarkMode(),
+            ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.notifications_active_rounded, color: AppColors.islamicGold),
+            title: const Text("Prayer Adhan Notifications", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            subtitle: const Text("Audio Adhan at each prayer time", style: TextStyle(fontSize: 11, color: Colors.grey)),
+            trailing: Switch(
+              value: true,
+              activeColor: AppColors.islamicGold,
+              onChanged: (val) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(val ? "Adhan notifications enabled 🕋" : "Notifications muted"),
+                    duration: const Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+            ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.wb_sunny_rounded, color: AppColors.islamicGold),
+            title: const Text("Morning & Evening Dhikr Reminders", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            subtitle: const Text("Daily reminders for your spiritual fortress", style: TextStyle(fontSize: 11, color: Colors.grey)),
+            trailing: Switch(
+              value: true,
+              activeColor: AppColors.islamicGold,
+              onChanged: (val) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(val ? "Dhikr reminders enabled 🌅" : "Dhikr reminders disabled"),
+                    duration: const Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
             ),
           ),
         ],

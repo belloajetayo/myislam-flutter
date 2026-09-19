@@ -198,6 +198,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
 
                 if (_islamicToolsExpanded) ...[
+                  _buildSubItem("Hijri Calendar", Icons.calendar_month_rounded, [0xFFD97706, 0xFFF59E0B], () {
+                    Navigator.pop(context);
+                    widget.onNavigate("calendar");
+                  }),
                   _buildSubItem("Digital Tasbih", Icons.fingerprint_rounded, [0xFF059669, 0xFF10B981], () {
                     Navigator.pop(context);
                     widget.onNavigate("tasbih");

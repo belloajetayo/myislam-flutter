@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/animated_back_button.dart';
 import '../../data/models/quran_models.dart';
 import '../../data/services/quran_service.dart';
 import '../../data/services/audio_service.dart';
@@ -231,6 +232,12 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Center(
+          child: AnimatedBackButton(
+            size: 38,
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

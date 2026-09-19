@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/animated_back_button.dart';
 import '../../data/services/prayer_service.dart';
 
 class FastingScreen extends StatelessWidget {
@@ -29,21 +30,7 @@ class FastingScreen extends StatelessWidget {
           // Header Bar
           Row(
             children: [
-              GestureDetector(
-                onTap: onBack,
-                child: Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.white.withOpacity(0.08) : Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
-                    ),
-                  ),
-                  child: const Icon(Icons.arrow_back_rounded, size: 20),
-                ),
-              ),
+              AnimatedBackButton(onPressed: onBack),
               const SizedBox(width: 14),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

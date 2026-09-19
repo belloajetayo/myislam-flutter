@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../data/repositories/islamic_knowledge_repository.dart';
 import 'islamic_ai_service.dart';
 
 class MyIslamAiSheet extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  final List<String> _quickSuggestions = [
+  final List<String> _muslimSuggestions = [
     "🧭 App Tour & Guide",
     "🤲 Dua for peace & anxiety",
     "📖 Virtues of Surah Al-Mulk",
@@ -35,6 +36,22 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
     "🕋 How to find Qiblah?",
     "💰 How do I calculate Zakat?",
     "🌙 Fasting intentions & rules",
+    "❓ Forgot a Rak'ah in Salah?",
+    "❓ Swallowed water by mistake in fasting?",
+    "❓ What breaks Wudu?",
+    "🤲 How to make sincere Tawbah?",
+  ];
+
+  final List<String> _seekerSuggestions = [
+    "🧭 App Tour & Guide",
+    "🕊️ What is the core message of Islam?",
+    "✨ Who is Allah?",
+    "📖 Who is Jesus (Isa) in Islam?",
+    "🌸 What is the status of women in Islam?",
+    "🔬 Does the Quran agree with science?",
+    "🌟 How does someone become a Muslim?",
+    "🤝 Are non-Muslims welcomed in mosques?",
+    "❓ Why do Muslims pray 5 times a day?",
   ];
 
   @override
@@ -107,6 +124,11 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
         children: [
           // 1. Top Decorative Header & Branding
           _buildHeader(isDark),
+
+          // Audience Mode Switcher (Muslim Companion vs Exploring Islam)
+          _buildAudienceToggle(isDark, aiService),
+
+          const SizedBox(height: 6),
 
           // 2. Navigation Tabs
           Container(
@@ -263,7 +285,112 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
     );
   }
 
+  Widget _buildAudienceToggle(bool isDark, IslamicAiService aiService) {
+    final isMuslim = aiService.audienceMode == AiAudienceMode.muslim;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.white.withOpacity(0.06) : const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isDark ? Colors.white10 : const Color(0xFFE2E8F0),
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: () => aiService.setAudienceMode(AiAudienceMode.muslim),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  gradient: isMuslim ? AppColors.purpleGoldShiningGradient : null,
+                  color: isMuslim ? null : Colors.transparent,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: isMuslim
+                      ? [
+                          BoxShadow(
+                            color: AppColors.islamicGold.withOpacity(0.35),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : null,
+                ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("🌙", style: TextStyle(fontSize: 13)),
+                    const SizedBox(width: 6),
+                    Text(
+                      "Muslim Companion",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: isMuslim ? FontWeight.bold : FontWeight.w500,
+                        color: isMuslim ? Colors.white : (isDark ? Colors.white70 : const Color(0xFF475569)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 4),
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: () => aiService.setAudienceMode(AiAudienceMode.seeker),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  gradient: !isMuslim ? AppColors.purpleGoldShiningGradient : null,
+                  color: !isMuslim ? null : Colors.transparent,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: !isMuslim
+                      ? [
+                          BoxShadow(
+                            color: AppColors.islamicGold.withOpacity(0.35),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : null,
+                ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("🕊️", style: TextStyle(fontSize: 13)),
+                    const SizedBox(width: 6),
+                    Text(
+                      "Exploring Islam",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: !isMuslim ? FontWeight.bold : FontWeight.w500,
+                        color: !isMuslim ? Colors.white : (isDark ? Colors.white70 : const Color(0xFF475569)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildChatTab(bool isDark, IslamicAiService aiService) {
+    final suggestions = aiService.audienceMode == AiAudienceMode.muslim
+        ? _muslimSuggestions
+        : _seekerSuggestions;
+
     return Column(
       children: [
         // Quick suggestion chips bar
@@ -273,10 +400,10 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: _quickSuggestions.length,
+            itemCount: suggestions.length,
             separatorBuilder: (_, __) => const SizedBox(width: 8),
             itemBuilder: (context, index) {
-              final chip = _quickSuggestions[index];
+              final chip = suggestions[index];
               return ActionChip(
                 label: Text(chip, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
                 backgroundColor: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFF1F5F9),

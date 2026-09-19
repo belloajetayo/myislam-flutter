@@ -128,9 +128,10 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Prayer Top Bar
+              // Prayer Top Bar (Card goes to Prayer times; Hijri date goes to Islamic Calendar)
               PrayerTopBar(
                 onTap: () => onNavigate("prayer"),
+                onHijriDateTap: () => onNavigate("calendar"),
               ),
 
               // Quick Shortcuts (Pillars of Islam)
@@ -158,7 +159,9 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Islamic Calendar Card
-              const IslamicCalendarCard(),
+              IslamicCalendarCard(
+                onTap: () => onNavigate("calendar"),
+              ),
             ],
           ),
         ),

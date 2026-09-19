@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/animated_back_button.dart';
 import '../../data/models/dua_model.dart';
 import '../../data/sources/local_duas_data.dart';
 import '../../data/services/storage_service.dart';
@@ -219,20 +220,9 @@ class _DuasScreenState extends State<DuasScreen> {
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: widget.onBack,
-                  child: Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.white.withValues(alpha: 0.08) : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
-                      ),
-                    ),
-                    child: const Icon(Icons.arrow_back_rounded, size: 20),
-                  ),
+                AnimatedBackButton(
+                  onPressed: widget.onBack,
+                  tooltip: "Back to Home",
                 ),
                 const SizedBox(width: 12),
                 const Expanded(
@@ -327,6 +317,10 @@ class _DuasScreenState extends State<DuasScreen> {
               ),
             ),
           ),
+
+          // Time-Aware Recommended Routine Banner
+          if (_searchQuery.isEmpty && !_isGridView)
+            _buildRoutineBanner(isDark),
 
           // Categories Horizontal Chips Bar (When not searching and not in grid view)
           if (_searchQuery.isEmpty && !_isGridView)
@@ -529,6 +523,137 @@ class _DuasScreenState extends State<DuasScreen> {
                           );
                         },
                       ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRoutineBanner(bool isDark) {
+    final hour = DateTime.now().hour;
+    String routineId;
+    String routineTitle;
+    String routineSubtitle;
+    String icon;
+    List<Color> gradientColors;
+
+    if (hour >= 4 && hour < 12) {
+      routineId = "morning";
+      routineTitle = "Morning Adhkar Routine";
+      routineSubtitle = "Shield yourself from Fajr till Dhuhr";
+      icon = "🌅";
+      gradientColors = const [Color(0xFFF59E0B), Color(0xFFD97706)];
+    } else if (hour >= 15 && hour < 20) {
+      routineId = "evening";
+      routineTitle = "Evening Adhkar Routine";
+      routineSubtitle = "Fortress of the believer from Asr till Night";
+      icon = "🌆";
+      gradientColors = const [Color(0xFF8B5CF6), Color(0xFF6D28D9)];
+    } else {
+      routineId = "after-salah";
+      routineTitle = "Post-Prayer & Night Remembrances";
+      routineSubtitle = "Essential Tasbeeh & Ayatul Kursi";
+      icon = "✨";
+      gradientColors = const [Color(0xFF10B981), Color(0xFF047857)];
+    }
+
+    final routineDuas = LocalDuasData.duasMap[routineId] ?? [];
+    if (routineDuas.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 4, 16, 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isDark
+              ? [gradientColors[0].withOpacity(0.3), gradientColors[1].withOpacity(0.15)]
+              : [gradientColors[0].withOpacity(0.12), gradientColors[1].withOpacity(0.05)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: gradientColors[0].withOpacity(0.4),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: gradientColors),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: gradientColors[0].withOpacity(0.35),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            child: Text(icon, style: const TextStyle(fontSize: 20)),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      routineTitle,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: gradientColors[0].withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "Now",
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                          color: gradientColors[0],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  routineSubtitle,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: isDark ? Colors.white60 : Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: gradientColors[0],
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            ),
+            onPressed: () {
+              _openDetailScreen(routineDuas, 0, routineTitle);
+            },
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Start", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                SizedBox(width: 4),
+                Icon(Icons.play_arrow_rounded, size: 16),
+              ],
+            ),
           ),
         ],
       ),

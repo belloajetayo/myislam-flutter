@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/animated_back_button.dart';
 import '../../data/models/dua_model.dart';
 import '../../data/services/storage_service.dart';
 
@@ -186,9 +187,11 @@ class _DuaDetailScreenState extends State<DuaDetailScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => Navigator.of(context).pop(),
+        leading: Center(
+          child: AnimatedBackButton(
+            size: 38,
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         title: Column(
           children: [

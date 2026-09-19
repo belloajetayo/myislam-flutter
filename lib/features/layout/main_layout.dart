@@ -15,6 +15,7 @@ import '../hajj/hajj_screen.dart';
 import '../donate/donate_screen.dart';
 import '../profile/profile_screen.dart';
 import '../tasbih/tasbih_screen.dart';
+import '../calendar/hijri_calendar_screen.dart';
 import '../ai_companion/myislam_ai_floating_button.dart';
 
 class MainLayout extends StatefulWidget {
@@ -85,6 +86,11 @@ class _MainLayoutState extends State<MainLayout> {
           return ProfileScreen(onBack: () => setState(() => _activeSubRoute = null));
         case "tasbih":
           return TasbihScreen(onBack: () => setState(() => _activeSubRoute = null));
+        case "calendar":
+          return HijriCalendarScreen(
+            onBack: () => setState(() => _activeSubRoute = null),
+            onNavigate: _handleNavigate,
+          );
       }
     }
 

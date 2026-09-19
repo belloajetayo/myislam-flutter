@@ -6,8 +6,13 @@ import '../../../data/services/audio_service.dart';
 
 class PrayerTopBar extends StatelessWidget {
   final VoidCallback? onTap;
+  final VoidCallback? onHijriDateTap;
 
-  const PrayerTopBar({super.key, this.onTap});
+  const PrayerTopBar({
+    super.key,
+    this.onTap,
+    this.onHijriDateTap,
+  });
 
   static const List<Map<String, String>> prayersList = [
     {"name": "Fajr", "arabic": "الفجر"},
@@ -17,24 +22,6 @@ class PrayerTopBar extends StatelessWidget {
     {"name": "Maghrib", "arabic": "المغرب"},
     {"name": "Isha", "arabic": "العشاء"},
   ];
-
-  LinearGradient _getPrayerGradient(String prayer, bool isDark) {
-    switch (prayer.toLowerCase()) {
-      case "fajr":
-        return AppColors.fajrDawnGradient;
-      case "sunrise":
-        return AppColors.sunriseGradient;
-      case "dhuhr":
-        return AppColors.dhuhrAzureGradient;
-      case "asr":
-        return AppColors.asrAmberGradient;
-      case "maghrib":
-        return AppColors.maghribDuskGradient;
-      case "isha":
-      default:
-        return isDark ? AppColors.purpleGoldHeroGradient : AppColors.purpleGoldShiningGradient;
-    }
-  }
 
   void _playAdhanPreview(BuildContext context) {
     final audioService = context.read<AudioService>();
@@ -59,7 +46,7 @@ class PrayerTopBar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final times = prayerService.times.toMap();
     final current = prayerService.currentPrayer;
-    final gradient = _getPrayerGradient(current, isDark);
+    final gradient = isDark ? AppColors.purpleGoldHeroGradient : AppColors.purpleGoldShiningGradient;
 
     return GestureDetector(
       onTap: onTap,
@@ -69,9 +56,13 @@ class PrayerTopBar extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: gradient,
           borderRadius: BorderRadius.circular(28),
+          border: Border.all(
+            color: AppColors.islamicGold.withOpacity(isDark ? 0.35 : 0.4),
+            width: 1.5,
+          ),
           boxShadow: [
             BoxShadow(
-              color: gradient.colors.first.withOpacity(isDark ? 0.4 : 0.3),
+              color: gradient.colors.first.withOpacity(isDark ? 0.45 : 0.25),
               blurRadius: 22,
               offset: const Offset(0, 8),
             ),
@@ -98,38 +89,64 @@ class PrayerTopBar extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top row: Islamic Date + City Badge + Adhan Audio Button
+                  // Top row: Islamic Date (clickable to calendar) + City Badge + Adhan Audio Button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Islamic Date
-                      Row(
-                        children: [
-                          const Text("🌙", style: TextStyle(fontSize: 14)),
-                          const SizedBox(width: 6),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      // Islamic Date (Clickable to open Hijri Calendar)
+                      GestureDetector(
+                        onTap: onHijriDateTap,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.16),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: AppColors.islamicGoldLight.withOpacity(0.4),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                "HIJRI DATE",
-                                style: TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 1,
-                                  color: Colors.white.withOpacity(0.8),
-                                ),
-                              ),
-                              Text(
-                                prayerService.hijriDate.formatted,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                              const Text("🌙", style: TextStyle(fontSize: 14)),
+                              const SizedBox(width: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "HIJRI DATE",
+                                        style: TextStyle(
+                                          fontSize: 8.5,
+                                          fontWeight: FontWeight.w800,
+                                          letterSpacing: 1,
+                                          color: AppColors.islamicGoldLight,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Icon(
+                                        Icons.calendar_month_rounded,
+                                        size: 10,
+                                        color: AppColors.islamicGoldLight,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    prayerService.hijriDate.formatted,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
 
                       // City Location Badge + Adhan Preview

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import '../../data/repositories/islamic_knowledge_repository.dart';
 
 class AiChatMessage {
   final String text;
@@ -44,9 +45,11 @@ class IslamicAiService extends ChangeNotifier {
   final List<AiChatMessage> _messages = [];
   bool _isTyping = false;
   String? _geminiApiKey;
+  AiAudienceMode _audienceMode = AiAudienceMode.muslim;
 
   List<AiChatMessage> get messages => List.unmodifiable(_messages);
   bool get isTyping => _isTyping;
+  AiAudienceMode get audienceMode => _audienceMode;
 
   IslamicAiService() {
     _initWelcome();
@@ -56,18 +59,41 @@ class IslamicAiService extends ChangeNotifier {
     _geminiApiKey = key;
   }
 
+  void setAudienceMode(AiAudienceMode mode) {
+    if (_audienceMode != mode) {
+      _audienceMode = mode;
+      _initWelcome();
+      notifyListeners();
+    }
+  }
+
   void _initWelcome() {
-    _messages.add(
-      AiChatMessage(
-        isUser: false,
-        text:
-            "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّهِ وَبَرَكَاتُهُ\n\nWelcome! I am **MyIslam AI**, your personal Islamic companion and interactive guide to the app.\n\nAsk me any question about the Holy Quran, Hadith, daily prayers, fasting, duas, or tap below to explore any feature in MyIslam!",
-        suggestedRoute: "home",
-        suggestedRouteLabel: "Explore App Tour",
-        arabicReference: "وَقُل رَّبِّ زِدْنِي عِلْمًا",
-        englishReference: "“And say: My Lord, increase me in knowledge.” (Surah Taha 20:114)",
-      ),
-    );
+    _messages.clear();
+    if (_audienceMode == AiAudienceMode.seeker) {
+      _messages.add(
+        AiChatMessage(
+          isUser: false,
+          text:
+              "Welcome! Peace be upon you 🕊️\n\nI am **MyIslam AI**, your personal guide and companion to understanding Islam.\n\nWhether you are curious about what Muslims believe, who Jesus is in Islam, the concept of God, scientific reflections in the Quran, or women's rights in Islam, I am here to answer with kindness, clarity, and respect.",
+          suggestedRoute: "home",
+          suggestedRouteLabel: "Explore App Tour",
+          arabicReference: "يَا أَيُّهَا النَّاسُ إِنَّا خَلَقْنَاكُم مِّن ذَكَرٍ وَأُنثَىٰ وَجَعَلْنَاكُمْ شُعُوبًا وَقَبَائِلَ لِتَعَارَفُوا",
+          englishReference: "“O humanity! Indeed, We created you from a male and a female, and made you into peoples and tribes so that you may get to know one another.” (Surah Al-Hujurat 49:13)",
+        ),
+      );
+    } else {
+      _messages.add(
+        AiChatMessage(
+          isUser: false,
+          text:
+              "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّهِ وَبَرَكَاتُهُ\n\nWelcome! I am **MyIslam AI**, your personal Islamic companion and interactive guide.\n\nAsk me any question about the Holy Quran, Sunnah, Hadith, daily Fiqh & IslamQA rulings, prayers, fasting, or tap below to navigate anywhere in MyIslam!",
+          suggestedRoute: "home",
+          suggestedRouteLabel: "Explore App Tour",
+          arabicReference: "وَقُل رَّبِّ زِدْنِي عِلْمًا",
+          englishReference: "“And say: My Lord, increase me in knowledge.” (Surah Taha 20:114)",
+        ),
+      );
+    }
   }
 
   /// Interactive App Tour items
@@ -181,6 +207,20 @@ class IslamicAiService extends ChangeNotifier {
         "Rich selection of legendary Qaris",
       ],
     ),
+    AppFeatureGuideItem(
+      title: "Islamic Hijri Calendar",
+      subtitle: "Lunar Month Grid, White Days & Events",
+      icon: "🗓️",
+      route: "calendar",
+      description:
+          "Explore the complete Islamic lunar calendar with month-by-month grid, White Days (Ayyam al-Beed: 13th-15th) fasting indicators, Friday Jumu'ah highlights, holy milestones (Ramadan, Eid, Ashura, Arafah), and a two-way Gregorian ↔ Hijri date converter.",
+      highlights: [
+        "Full 12-month Hijri grid with Gregorian overlay",
+        "White Days (Ayyam al-Beed) Sunnah fasting markers",
+        "Upcoming sacred Islamic events with countdowns",
+        "Interactive Gregorian to Hijri date converter",
+      ],
+    ),
   ];
 
   Future<void> sendMessage(String userText) async {
@@ -195,7 +235,25 @@ class IslamicAiService extends ChangeNotifier {
     await Future.delayed(const Duration(milliseconds: 650));
 
     try {
-      // 1. Check if Gemini API key is configured and can be queried
+      // 1. Check verified Islamic Knowledge Repository (IslamQA + Interfaith)
+      final repoMatch = IslamicKnowledgeRepository.findBestMatch(cleanInput, mode: _audienceMode);
+      if (repoMatch != null) {
+        _messages.add(
+          AiChatMessage(
+            isUser: false,
+            text: repoMatch.englishText,
+            arabicReference: repoMatch.arabicAyahOrHadith,
+            englishReference: repoMatch.scholarlyReference,
+            suggestedRoute: repoMatch.suggestedRoute,
+            suggestedRouteLabel: repoMatch.suggestedRouteLabel,
+          ),
+        );
+        _isTyping = false;
+        notifyListeners();
+        return;
+      }
+
+      // 2. Check if Gemini API key is configured and can be queried
       if (_geminiApiKey != null && _geminiApiKey!.isNotEmpty) {
         final geminiReply = await _queryGemini(cleanInput);
         if (geminiReply != null) {
@@ -206,7 +264,7 @@ class IslamicAiService extends ChangeNotifier {
         }
       }
 
-      // 2. Intelligent Built-in Islamic Knowledge & Guide Engine
+      // 3. Intelligent Built-in Islamic Knowledge & Guide Engine
       final reply = _generateIntelligentIslamicReply(cleanInput);
       _messages.add(reply);
     } catch (_) {
@@ -228,13 +286,17 @@ class IslamicAiService extends ChangeNotifier {
       final url = Uri.parse(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$_geminiApiKey",
       );
+
+      final systemRole = _audienceMode == AiAudienceMode.seeker
+          ? "You are MyIslam AI, an empathetic, respectful, and wise ambassador of Islamic knowledge and interfaith understanding. Your audience is non-Muslims, seekers, and curious learners. Answer questions clearly with kindness, dismantle misconceptions with wisdom, explain core beliefs (such as One God, Jesus in Islam, and women's dignity), and avoid untranslated jargon."
+          : "You are MyIslam AI, a polite, respectful, and authentic Islamic AI guide and app companion for practicing Muslims. Ground your answers in the Holy Quran, authentic Sunnah (Sahih Bukhari, Sahih Muslim), and scholarly consensus like IslamQA. Provide precise Surah:Ayah or Hadith citations.";
+
       final body = json.encode({
         "contents": [
           {
             "parts": [
               {
-                "text":
-                    "You are MyIslam AI, a polite, respectful, and authentic Islamic AI guide and app companion. Answer the user's question clearly, warmly, and grounded in the Holy Quran and authentic Sunnah. When appropriate, provide Arabic verses or Hadith references with English translations.\n\nUser Question: $prompt",
+                "text": "$systemRole\n\nUser Question: $prompt",
               }
             ]
           }
@@ -295,6 +357,32 @@ class IslamicAiService extends ChangeNotifier {
             "Tap any of the quick shortcuts or ask me where you'd like to go!",
         suggestedRoute: "home",
         suggestedRouteLabel: "Open App Home",
+      );
+    }
+
+    // Islamic Calendar / Hijri Date inquiries
+    if (lower.contains("calendar") ||
+        lower.contains("hijri") ||
+        lower.contains("white day") ||
+        lower.contains("ayyam al-beed") ||
+        lower.contains("ayyam al beed") ||
+        lower.contains("islamic date") ||
+        lower.contains("sacred month") ||
+        lower.contains("ashura") ||
+        lower.contains("mawlid")) {
+      return AiChatMessage(
+        isUser: false,
+        text:
+            "The **Islamic Hijri Calendar** is a sacred lunar calendar of 12 months decreed by Allah in the Holy Quran (Surah At-Tawbah 9:36).\n\n"
+            "Key virtues & dates:\n"
+            "• **White Days (Ayyam al-Beed)**: 13th, 14th, and 15th of every lunar month. Fasting them is like fasting a lifetime (Sahih al-Bukhari 1975).\n"
+            "• **Sacred Months (الأشهر الحرم)**: Dhul Qi'dah, Dhul Hijjah, Muharram, and Rajab.\n"
+            "• **Milestones**: Ramadan, Eid al-Fitr, Day of Arafah, Eid al-Adha, and Ashura.\n\n"
+            "Tap below to open our interactive Month Grid and two-way date converter!",
+        suggestedRoute: "calendar",
+        suggestedRouteLabel: "Open Islamic Calendar",
+        arabicReference: "إِنَّ عِدَّةَ الشُّهُورِ عِندَ اللَّهِ اثْنَا عَشَرَ شَهْرًا فِي كِتَابِ اللَّهِ",
+        englishReference: "“Indeed, the number of months with Allah is twelve [lunar] months in the register of Allah.” (Surah At-Tawbah 9:36)",
       );
     }
 

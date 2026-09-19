@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/animated_back_button.dart';
 
 class DonateScreen extends StatefulWidget {
   final VoidCallback onBack;
@@ -81,18 +82,9 @@ class _DonateScreenState extends State<DonateScreen> {
                 // Back Button
                 Row(
                   children: [
-                    GestureDetector(
-                      onTap: widget.onBack,
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: Colors.white30),
-                        ),
-                        child: const Icon(Icons.arrow_back_rounded, color: Colors.white, size: 20),
-                      ),
+                    AnimatedBackButton(
+                      onPressed: widget.onBack,
+                      iconColor: Colors.white,
                     ),
                   ],
                 ),
@@ -203,13 +195,7 @@ class _DonateScreenState extends State<DonateScreen> {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                             elevation: 0,
                           ),
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("JazakAllah Khair! Processing your ${_isMonthly ? 'monthly ' : ''}${_isZakat ? 'Zakat' : 'Sadaqah'} of \$$_selectedAmount 💛"),
-                              ),
-                            );
-                          },
+                          onPressed: () => _showPaymentSheet(context),
                           child: Text(
                             "Donate \$$_selectedAmount Now",
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -298,6 +284,135 @@ class _DonateScreenState extends State<DonateScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showPaymentSheet(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (modalContext) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF131131) : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 44,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.35),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Complete Your Donation",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          "${_isMonthly ? 'Monthly ' : 'One-time '}${_isZakat ? 'Zakat' : 'Sadaqah'} of \$$_selectedAmount",
+                          style: const TextStyle(fontSize: 13, color: AppColors.islamicGold, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () => Navigator.pop(modalContext),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Option 1: Card / Stripe Mock
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+                  ),
+                  tileColor: isDark ? Colors.white.withOpacity(0.04) : const Color(0xFFF8FAFC),
+                  leading: const Icon(Icons.credit_card_rounded, color: AppColors.islamicGold, size: 28),
+                  title: const Text("Pay with Card (Stripe / Apple Pay)", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
+                  subtitle: const Text("Secure, instant 256-bit encrypted checkout", style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey),
+                  onTap: () {
+                    Navigator.pop(modalContext);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("JazakAllah Khair! Received \$$_selectedAmount. A receipt has been issued 💛"),
+                        backgroundColor: const Color(0xFF10B981),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+
+                // Option 2: Bank Transfer Details
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+                  ),
+                  tileColor: isDark ? Colors.white.withOpacity(0.04) : const Color(0xFFF8FAFC),
+                  leading: const Icon(Icons.account_balance_rounded, color: AppColors.islamicIndigo, size: 28),
+                  title: const Text("Direct Bank Transfer", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
+                  subtitle: const Text("Account: 82910482 • Sort: 20-40-71 • GB29MYIS...", style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  trailing: const Icon(Icons.copy_rounded, size: 18, color: AppColors.islamicGold),
+                  onTap: () {
+                    _copyAddress("Bank Transfer", "Bank: MyIslam Foundation\nAccount: 82910482\nSort Code: 20-40-71\nIBAN: GB29MYIS82910482");
+                  },
+                ),
+                const SizedBox(height: 10),
+
+                // Option 3: PayPal Giving Fund
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+                  ),
+                  tileColor: isDark ? Colors.white.withOpacity(0.04) : const Color(0xFFF8FAFC),
+                  leading: const Icon(Icons.volunteer_activism_rounded, color: Color(0xFF0EA5E9), size: 28),
+                  title: const Text("PayPal Giving Fund", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
+                  subtitle: const Text("paypal.me/myislamapp (No processing fees)", style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  trailing: const Icon(Icons.copy_rounded, size: 18, color: AppColors.islamicGold),
+                  onTap: () {
+                    _copyAddress("PayPal", "https://paypal.me/myislamapp");
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

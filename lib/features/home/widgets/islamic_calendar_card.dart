@@ -4,7 +4,9 @@ import '../../../core/constants/app_colors.dart';
 import '../../../data/services/prayer_service.dart';
 
 class IslamicCalendarCard extends StatelessWidget {
-  const IslamicCalendarCard({super.key});
+  final VoidCallback? onTap;
+
+  const IslamicCalendarCard({super.key, this.onTap});
 
   static const List<Map<String, String>> upcomingEvents = [
     {"name": "Ramadan 1448", "date": "1 Ramadan", "countdown": "~5 months"},
@@ -19,7 +21,9 @@ class IslamicCalendarCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final hijri = prayerService.hijriDate;
 
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -138,8 +142,28 @@ class IslamicCalendarCard extends StatelessWidget {
               );
             }).toList(),
           ),
+
+          const SizedBox(height: 10),
+
+          // Tap to view full calendar
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Open Full Islamic Calendar",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.islamicGold,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Icon(Icons.arrow_forward_rounded, size: 14, color: AppColors.islamicGold),
+            ],
+          ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

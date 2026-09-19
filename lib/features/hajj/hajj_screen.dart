@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/animated_back_button.dart';
 
 class HajjScreen extends StatefulWidget {
   final VoidCallback onBack;
@@ -12,6 +13,7 @@ class HajjScreen extends StatefulWidget {
 
 class _HajjScreenState extends State<HajjScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final Set<String> _checkedItems = {};
 
   static const List<Map<String, String>> hajjSteps = [
     {
@@ -79,21 +81,7 @@ class _HajjScreenState extends State<HajjScreen> with SingleTickerProviderStateM
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: widget.onBack,
-                  child: Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.white.withOpacity(0.08) : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
-                      ),
-                    ),
-                    child: const Icon(Icons.arrow_back_rounded, size: 20),
-                  ),
-                ),
+                AnimatedBackButton(onPressed: widget.onBack),
                 const SizedBox(width: 14),
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,6 +203,50 @@ class _HajjScreenState extends State<HajjScreen> with SingleTickerProviderStateM
                 ListView(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
                   children: [
+                    // Interactive Progress Card
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.purpleGoldShiningGradient,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.islamicGold.withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Packing Progress",
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                              ),
+                              Text(
+                                "${_checkedItems.length} / 10 Packed",
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: LinearProgressIndicator(
+                              value: (_checkedItems.length / 10).clamp(0.0, 1.0),
+                              minHeight: 6,
+                              backgroundColor: Colors.white24,
+                              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     _buildChecklistCategory("Essential Documents", [
                       "Passport with valid Hajj/Umrah visa",
                       "Vaccination certificates (Meningitis, etc.)",
@@ -279,14 +311,40 @@ class _HajjScreenState extends State<HajjScreen> with SingleTickerProviderStateM
           Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.islamicGold)),
           const SizedBox(height: 8),
           ...items.map((i) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                children: [
-                  const Icon(Icons.check_box_outline_blank_rounded, size: 18, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(i, style: const TextStyle(fontSize: 12))),
-                ],
+            final isChecked = _checkedItems.contains(i);
+            return InkWell(
+              onTap: () {
+                setState(() {
+                  if (isChecked) {
+                    _checkedItems.remove(i);
+                  } else {
+                    _checkedItems.add(i);
+                  }
+                });
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                child: Row(
+                  children: [
+                    Icon(
+                      isChecked ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
+                      size: 20,
+                      color: isChecked ? AppColors.islamicGold : Colors.grey,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        i,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          decoration: isChecked ? TextDecoration.lineThrough : null,
+                          color: isChecked ? Colors.grey : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }),
