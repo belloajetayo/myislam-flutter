@@ -23,7 +23,7 @@ class _AppDrawerState extends State<AppDrawer> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Drawer(
-      backgroundColor: isDark ? AppColors.darkBgStart : Colors.white,
+      backgroundColor: isDark ? AppColors.darkBgStart : AppColors.lightBgStart,
       child: Column(
         children: [
           // Gradient Header

@@ -183,7 +183,7 @@ class _DuaDetailScreenState extends State<DuaDetailScreen> {
     final isFavorite = storage.isFavoriteDua(currentDua.id);
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F0C29) : const Color(0xFFF8FAFC),
+      backgroundColor: isDark ? const Color(0xFF0F0C29) : AppColors.lightBgStart,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -24,15 +24,15 @@ class AppColors {
   static const Color darkTextPrimary = Color(0xFFFAF7F2);
   static const Color darkTextSecondary = Color(0xFF9E97B8);
 
-  // Light Mode Palette (myislam2 warm cream-ivory: hsl(40 30% 98%))
-  static const Color lightBgStart = Color(0xFFFDFBF7);
-  static const Color lightBgMid = Color(0xFFF8F4EE);
-  static const Color lightBgEnd = Color(0xFFF4ECE1);
-  static const Color lightCardBg = Colors.white;
-  static const Color lightSurface = Colors.white;
-  static const Color lightBorder = Color(0xFFEADBCE);
-  static const Color lightTextPrimary = Color(0xFF1E1B2E);
-  static const Color lightTextSecondary = Color(0xFF68607A);
+  // Light Mode Palette (Sea Blue Theme)
+  static const Color lightBgStart = Color(0xFFE8F4FD); // Gentle Sea Blue
+  static const Color lightBgMid = Color(0xFFDCF0FB);   // Soft Coastal Sea Blue
+  static const Color lightBgEnd = Color(0xFFCEE9FA);   // Radiant Azure Sea Blue
+  static const Color lightCardBg = Colors.white;       // Crisp white cards pop on sea blue
+  static const Color lightSurface = Color(0xFFF0F7FD); // Very subtle sea tint surface
+  static const Color lightBorder = Color(0xFFBAE0F8);  // Sea Blue border
+  static const Color lightTextPrimary = Color(0xFF0C1E33); // Deep ocean navy
+  static const Color lightTextSecondary = Color(0xFF3B566E); // Sea slate navy
 
   // Shining Purple-Gold Brand Gradient (Signature from myislam2.vercel.app)
   static const LinearGradient purpleGoldShiningGradient = LinearGradient(
