@@ -4,6 +4,10 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/repositories/islamic_knowledge_repository.dart';
 import 'islamic_ai_service.dart';
+import 'widgets/3d/mia_astra_3d_orb.dart';
+import 'widgets/3d/mia_astra_mini_orb.dart';
+import 'widgets/3d/mia_3d_companion_stage.dart';
+import 'widgets/3d/holographic_3d_card.dart';
 
 class MyIslamAiSheet extends StatefulWidget {
   final Function(String route) onNavigate;
@@ -27,6 +31,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
   late TabController _tabController;
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  bool _is3dStageExpanded = true;
 
   final List<String> _muslimSuggestions = [
     "🧭 App Tour & Guide",
@@ -58,6 +63,19 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _inputController.addListener(() {
+      if (mounted) setState(() {});
+    });
+  }
+
+  MiaOrbState _currentOrbState(IslamicAiService aiService) {
+    if (aiService.isTyping) return MiaOrbState.thinking;
+    if (_inputController.text.trim().isNotEmpty) return MiaOrbState.listening;
+    if (aiService.messages.isNotEmpty && !aiService.messages.last.isUser) {
+      final diff = DateTime.now().difference(aiService.messages.last.timestamp);
+      if (diff.inSeconds < 4) return MiaOrbState.speaking;
+    }
+    return MiaOrbState.idle;
   }
 
   @override
@@ -123,12 +141,20 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
       child: Column(
         children: [
           // 1. Top Decorative Header & Branding
-          _buildHeader(isDark),
+          _buildHeader(isDark, aiService),
 
           // Audience Mode Switcher (Muslim Companion vs Exploring Islam)
           _buildAudienceToggle(isDark, aiService),
 
-          const SizedBox(height: 6),
+          // 3D Interactive Astra Companion Stage
+          Mia3dCompanionStage(
+            state: _currentOrbState(aiService),
+            isExpanded: _is3dStageExpanded,
+            onToggleExpand: () => setState(() => _is3dStageExpanded = !_is3dStageExpanded),
+            onSelectPrompt: (prompt) => _handleQuickChip(aiService, prompt),
+          ),
+
+          const SizedBox(height: 4),
 
           // 2. Navigation Tabs
           Container(
@@ -184,14 +210,14 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
     );
   }
 
-  Widget _buildHeader(bool isDark) {
+  Widget _buildHeader(bool isDark, IslamicAiService aiService) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 14, 16, 12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
               ? [const Color(0xFF2E1065).withOpacity(0.4), Colors.transparent]
-              : [const Color(0xFFF3E8FF), Colors.white],
+              : [const Color(0xFFF0F9FF), Colors.white],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -211,23 +237,10 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
           ),
           Row(
             children: [
-              // Animated AI Avatar
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  gradient: AppColors.purpleGoldShiningGradient,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.islamicGold.withOpacity(0.4),
-                      blurRadius: 12,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 22),
+              // Animated 3D Astra Mini Orb Avatar
+              MiaAstraMiniOrb(
+                size: 46,
+                isThinking: aiService.isTyping,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -244,21 +257,27 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.islamicGold.withOpacity(0.18),
+                            gradient: AppColors.astraTrilateralGradient,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.islamicGold.withOpacity(0.4)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.astraSkyLight.withOpacity(0.35),
+                                blurRadius: 6,
+                              ),
+                            ],
                           ),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.circle, color: AppColors.islamicGold, size: 6),
+                              Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 10),
                               SizedBox(width: 4),
                               Text(
-                                "Guide & Sunnah",
+                                "ASTRA 3D",
                                 style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.islamicGold,
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ],
@@ -268,7 +287,7 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      "Your interactive app navigator and spiritual companion",
+                      "Friendly 3D Islamic companion & interactive guide",
                       style: TextStyle(fontSize: 11, color: isDark ? Colors.white60 : Colors.grey[600]),
                     ),
                   ],
@@ -690,104 +709,102 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
       itemCount: features.length,
       itemBuilder: (context, index) {
         final f = features[index];
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.darkCardBg : Colors.white,
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Holographic3dCard(
+            padding: const EdgeInsets.all(16),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(
-              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.goldWarm.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.goldWarm.withOpacity(0.35)),
+            onTap: () {
+              Navigator.pop(context);
+              widget.onNavigate(f.route);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        gradient: AppColors.astraTrilateralGradient,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.astraSkyLight.withOpacity(0.3),
+                            blurRadius: 8,
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(f.icon, style: const TextStyle(fontSize: 22)),
                     ),
-                    alignment: Alignment.center,
-                    child: Text(f.icon, style: const TextStyle(fontSize: 22)),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(f.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                        Text(f.subtitle, style: const TextStyle(fontSize: 11, color: AppColors.goldRoyal)),
-                      ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(f.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                          Text(f.subtitle, style: const TextStyle(fontSize: 11, color: AppColors.goldRoyal)),
+                        ],
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.islamicPurple,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.islamicPurple,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Open", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                          SizedBox(width: 4),
+                          Icon(Icons.arrow_forward_rounded, size: 14),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        widget.onNavigate(f.route);
+                      },
                     ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("Open", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                        SizedBox(width: 4),
-                        Icon(Icons.arrow_forward_rounded, size: 14),
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      widget.onNavigate(f.route);
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                f.description,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  height: 1.45,
-                  color: isDark ? Colors.white70 : Colors.grey[700],
+                  ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: f.highlights.map((h) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.white.withOpacity(0.06) : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.check_circle_rounded, color: AppColors.islamicGold, size: 12),
-                        const SizedBox(width: 4),
-                        Text(h, style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+                const SizedBox(height: 12),
+                Text(
+                  f.description,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    height: 1.45,
+                    color: isDark ? Colors.white70 : Colors.grey[700],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: f.highlights.map((h) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.white.withOpacity(0.06) : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.check_circle_rounded, color: AppColors.islamicGold, size: 12),
+                          const SizedBox(width: 4),
+                          Text(h, style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -835,86 +852,86 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
       itemCount: pearls.length,
       itemBuilder: (context, index) {
         final p = pearls[index];
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.darkCardBg : Colors.white,
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Holographic3dCard(
+            padding: const EdgeInsets.all(16),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(
-              color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.auto_awesome_rounded, color: AppColors.goldWarm, size: 18),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      p["title"]!,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.goldWarm.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.goldWarm.withOpacity(0.3)),
-                ),
-                child: Column(
+            onTap: () {
+              Navigator.pop(context);
+              widget.onNavigate(p["route"]!);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Text(
-                      p["arabic"]!,
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                      style: GoogleFonts.amiriQuran(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.goldRoyal,
+                    const Icon(Icons.auto_awesome_rounded, color: AppColors.goldWarm, size: 18),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        p["title"]!,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      p["translation"]!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 11.5, fontStyle: FontStyle.italic, color: isDark ? Colors.white70 : Colors.grey[700]),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                p["explanation"]!,
-                style: TextStyle(fontSize: 12.5, height: 1.45, color: isDark ? Colors.white70 : Colors.grey[700]),
-              ),
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.islamicPurple,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                const SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.goldWarm.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.goldWarm.withOpacity(0.3)),
                   ),
-                  icon: const Icon(Icons.arrow_forward_rounded, size: 14),
-                  label: Text(p["action"]!, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    widget.onNavigate(p["route"]!);
-                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        p["arabic"]!,
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                        style: GoogleFonts.amiriQuran(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.goldRoyal,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        p["translation"]!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 11.5, fontStyle: FontStyle.italic, color: isDark ? Colors.white70 : Colors.grey[700]),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                Text(
+                  p["explanation"]!,
+                  style: TextStyle(fontSize: 12.5, height: 1.45, color: isDark ? Colors.white70 : Colors.grey[700]),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.islamicPurple,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    icon: const Icon(Icons.arrow_forward_rounded, size: 14),
+                    label: Text(p["action"]!, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      widget.onNavigate(p["route"]!);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../data/services/audio_service.dart';
+import '../podcasts/widgets/now_playing_sheet.dart';
 
 class MiniPlayer extends StatelessWidget {
   const MiniPlayer({super.key});
@@ -13,7 +14,9 @@ class MiniPlayer extends StatelessWidget {
 
     if (!audioService.hasTrack) return const SizedBox.shrink();
 
-    return Container(
+    return GestureDetector(
+      onTap: () => NowPlayingSheet.show(context),
+      child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
@@ -90,6 +93,7 @@ class MiniPlayer extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

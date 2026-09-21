@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/sources/local_hadiths_data.dart';
+import '../../ai_companion/widgets/3d/holographic_3d_card.dart';
 
 class DailyCardsCarousel extends StatefulWidget {
   const DailyCardsCarousel({super.key});
@@ -49,10 +50,14 @@ class _DailyCardsCarouselState extends State<DailyCardsCarousel> {
         ),
         const SizedBox(height: 12),
 
-        // Main Card
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
+        // Main 3D Holographic Card
+        Holographic3dCard(
+          borderRadius: BorderRadius.circular(28),
+          baseColor: Colors.transparent,
+          border: Border.all(color: Colors.transparent),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(28),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
@@ -234,6 +239,7 @@ class _DailyCardsCarouselState extends State<DailyCardsCarousel> {
             ),
           ),
         ),
+      ),
       ],
     );
   }

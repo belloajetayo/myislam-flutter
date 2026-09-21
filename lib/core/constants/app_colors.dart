@@ -56,6 +56,53 @@ class AppColors {
     ],
   );
 
+  // Astra 3D Palette (Sky Blue, Shining Gold, Royal Purple Gradients)
+  static const Color astraSky = Color(0xFF0EA5E9);
+  static const Color astraSkyLight = Color(0xFF38BDF8);
+  static const Color astraSkyCyan = Color(0xFF06B6D4);
+  static const Color astraSkySoft = Color(0xFFE0F2FE);
+
+  static const Color astraGold = Color(0xFFF59E0B);
+  static const Color astraGoldLight = Color(0xFFFDE047);
+  static const Color astraGoldShine = Color(0xFFFFFBEB);
+
+  static const Color astraPurple = Color(0xFF8B5CF6);
+  static const Color astraPurpleDeep = Color(0xFF6D28D9);
+  static const Color astraPurpleCosmic = Color(0xFF2E1065);
+
+  // Astra 3D Fusion Gradients (Friendly & Radiant)
+  static const LinearGradient astraTrilateralGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF38BDF8), // Sky Blue Light
+      Color(0xFF0EA5E9), // Sky Blue
+      Color(0xFFFBBF24), // Shining Gold
+      Color(0xFFA855F7), // Radiant Violet
+      Color(0xFF7E22CE), // Cosmic Purple
+    ],
+  );
+
+  static const LinearGradient astraFriendlyGlowGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFF7DD3FC), // Gentle Sky Blue
+      Color(0xFFFDE047), // Friendly Gold
+      Color(0xFFC084FC), // Soft Lavender
+    ],
+  );
+
+  static const RadialGradient astraAtmosphereGradient = RadialGradient(
+    colors: [
+      Color(0x6638BDF8), // Glowing Sky Blue
+      Color(0x44FBBF24), // Shimmering Gold
+      Color(0x33A855F7), // Soft Purple
+      Colors.transparent,
+    ],
+    stops: [0.0, 0.45, 0.75, 1.0],
+  );
+
   // Gradients
   static const LinearGradient darkBackgroundGradient = LinearGradient(
     begin: Alignment.topLeft,

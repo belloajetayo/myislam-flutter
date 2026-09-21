@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import 'islamic_ai_service.dart';
 import 'myislam_ai_sheet.dart';
+import 'widgets/3d/mia_astra_mini_orb.dart';
 
 class MyIslamAiFloatingButton extends StatefulWidget {
   final Function(String route) onNavigate;
@@ -11,7 +14,8 @@ class MyIslamAiFloatingButton extends StatefulWidget {
   State<MyIslamAiFloatingButton> createState() => _MyIslamAiFloatingButtonState();
 }
 
-class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with SingleTickerProviderStateMixin {
+class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
   bool _showTooltip = true;
@@ -24,11 +28,11 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
 
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.14).animate(
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.10).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
 
-    // Auto-hide the intro tooltip callout after 12 seconds so it doesn't get in the way
+    // Auto-hide the intro tooltip callout after 12 seconds
     Future.delayed(const Duration(seconds: 12), () {
       if (mounted) setState(() => _showTooltip = false);
     });
@@ -47,60 +51,105 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isThinking = context.watch<IslamicAiService?>()?.isTyping ?? false;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Optional Welcome Callout Bubble
+        // Friendly Astra 3D Callout Bubble
         if (_showTooltip) ...[
           GestureDetector(
             onTap: _openAiCompanion,
             child: Container(
               margin: const EdgeInsets.only(right: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF2E1065), Color(0xFF1E1B4B)],
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: isDark
+                      ? [
+                          const Color(0xFF1E1B4B),
+                          const Color(0xFF0F172A),
+                        ]
+                      : [
+                          const Color(0xFFF0F9FF),
+                          Colors.white,
+                        ],
                 ),
-                borderRadius: BorderRadius.circular(16).copyWith(
+                borderRadius: BorderRadius.circular(18).copyWith(
                   bottomRight: const Radius.circular(2),
                 ),
-                border: Border.all(color: AppColors.islamicGold.withOpacity(0.6), width: 1.2),
+                border: Border.all(
+                  color: AppColors.astraSkyLight.withOpacity(0.6),
+                  width: 1.4,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
+                    color: AppColors.astraPurple.withOpacity(isDark ? 0.4 : 0.15),
+                    blurRadius: 14,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text("✨", style: TextStyle(fontSize: 13)),
-                  const SizedBox(width: 6),
-                  const Column(
+                  const Text("✨", style: TextStyle(fontSize: 14)),
+                  const SizedBox(width: 8),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        "MyIslam AI Guide",
-                        style: TextStyle(
-                          color: AppColors.islamicGold,
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            "MIA 3D Guide",
+                            style: TextStyle(
+                              color: AppColors.astraSky,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: AppColors.astraGold.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Text(
+                              "ASTRA",
+                              style: TextStyle(
+                                fontSize: 8,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.astraGold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 1),
                       Text(
-                        "Tap for App Tour & Quran help",
-                        style: TextStyle(color: Colors.white70, fontSize: 9.5),
+                        "Tap for Quran, Duas & 3D Tour",
+                        style: TextStyle(
+                          color: isDark ? Colors.white70 : Colors.black87,
+                          fontSize: 10,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () => setState(() => _showTooltip = false),
-                    child: const Icon(Icons.close_rounded, size: 14, color: Colors.white60),
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: 14,
+                      color: isDark ? Colors.white54 : Colors.grey,
+                    ),
                   ),
                 ],
               ),
@@ -108,7 +157,7 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
           ),
         ],
 
-        // Floating Action Orb with Breathing Glow
+        // 3D Astra Mini Orb with Volumetric Glow & Celestial Rotation
         AnimatedBuilder(
           animation: _pulseAnimation,
           builder: (context, child) {
@@ -119,13 +168,13 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.islamicGold.withOpacity(0.45),
-                      blurRadius: 16 * _pulseAnimation.value,
+                      color: AppColors.astraSkyLight.withOpacity(0.4),
+                      blurRadius: 20 * _pulseAnimation.value,
                       spreadRadius: 2 * _pulseAnimation.value,
                     ),
                     BoxShadow(
-                      color: AppColors.islamicPurple.withOpacity(0.4),
-                      blurRadius: 12,
+                      color: AppColors.astraPurple.withOpacity(0.35),
+                      blurRadius: 14,
                       offset: const Offset(0, 4),
                     ),
                   ],
@@ -140,46 +189,42 @@ class _MyIslamAiFloatingButtonState extends State<MyIslamAiFloatingButton> with 
             child: InkWell(
               onTap: _openAiCompanion,
               customBorder: const CircleBorder(),
-              child: Container(
-                width: 54,
-                height: 54,
-                decoration: BoxDecoration(
-                  gradient: AppColors.purpleGoldShiningGradient,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withOpacity(0.85), width: 2),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Ornate center icon
-                    const Icon(
-                      Icons.auto_awesome_rounded,
-                      color: Colors.white,
-                      size: 26,
-                    ),
-                    // Small "AI" badge at bottom
-                    Positioned(
-                      bottom: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF2E1065),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: AppColors.islamicGold, width: 0.8),
-                        ),
-                        child: const Text(
-                          "AI",
-                          style: TextStyle(
-                            fontSize: 8,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.islamicGold,
-                            letterSpacing: 0.5,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  MiaAstraMiniOrb(
+                    size: 58,
+                    isThinking: isThinking,
+                  ),
+                  // Small golden "3D" badge at bottom-right
+                  Positioned(
+                    bottom: 2,
+                    right: 2,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.astraTrilateralGradient,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: Colors.white, width: 0.8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 4,
                           ),
+                        ],
+                      ),
+                      child: const Text(
+                        "3D",
+                        style: TextStyle(
+                          fontSize: 7.5,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          letterSpacing: 0.4,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
