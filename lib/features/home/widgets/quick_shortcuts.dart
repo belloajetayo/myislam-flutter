@@ -59,6 +59,22 @@ class QuickShortcuts extends StatelessWidget {
       "route": "zakat",
     },
     {
+      "label": "Prophets",
+      "arabic": "الأنبياء",
+      "icon": Icons.auto_stories_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFF7E22CE), Color(0xFFA855F7)]),
+      "route": "prophets",
+      "badge": "25 Anbiya",
+    },
+    {
+      "label": "Hadith",
+      "arabic": "الحديث",
+      "icon": Icons.menu_book_rounded,
+      "gradient": const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF6366F1)]),
+      "route": "hadith",
+      "badge": "40 Nawawi",
+    },
+    {
       "label": "Radio",
       "arabic": "إذاعة",
       "icon": Icons.headphones_rounded,

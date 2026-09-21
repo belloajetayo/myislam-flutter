@@ -222,6 +222,14 @@ class _AppDrawerState extends State<AppDrawer> {
                     Navigator.pop(context);
                     widget.onNavigate("hajj");
                   }),
+                  _buildSubItem("Stories of Prophets", Icons.auto_stories_rounded, [0xFF7E22CE, 0xFFA855F7], () {
+                    Navigator.pop(context);
+                    widget.onNavigate("prophets");
+                  }),
+                  _buildSubItem("Hadith Explorer", Icons.menu_book_rounded, [0xFF0EA5E9, 0xFF6366F1], () {
+                    Navigator.pop(context);
+                    widget.onNavigate("hadith");
+                  }),
                   _buildSubItem("Podcasts & Radio", Icons.headphones_rounded, [0xFF3B82F6, 0xFF1D4ED8], () {
                     Navigator.pop(context);
                     widget.onNavigate("podcasts");

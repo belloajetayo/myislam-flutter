@@ -221,6 +221,34 @@ class IslamicAiService extends ChangeNotifier {
         "Interactive Gregorian to Hijri date converter",
       ],
     ),
+    AppFeatureGuideItem(
+      title: "Stories of the Prophets",
+      subtitle: "25 Prophets Mentioned in the Quran",
+      icon: "📜",
+      route: "prophets",
+      description:
+          "Journey through the sacred biographies of all 25 Prophets of Allah, from Adam (AS) to the final Messenger Muhammad (ﷺ). Features verified Quranic verses, miraculous events (Mu'jizat), milestone timelines, moral lessons, and their authentic Quranic Duas.",
+      highlights: [
+        "All 25 Prophets documented in the Quran",
+        "Chronological eras & historical locations",
+        "Key Quranic Duas with Arabic, transliteration & English",
+        "Divine miracles (Al-Mu'jizat) granted to each Prophet",
+      ],
+    ),
+    AppFeatureGuideItem(
+      title: "Hadith Explorer",
+      subtitle: "40 Hadith Nawawi & Sahih Collections",
+      icon: "📚",
+      route: "hadith",
+      description:
+          "Read and study the complete 40 Hadith of Imam An-Nawawi (Al-Arba'in) along with authentic thematic Sahih collections covering faith, noble character (Akhlaq), family relationships, and repentance.",
+      highlights: [
+        "Complete 40 Hadith of Imam An-Nawawi",
+        "Thematic Hadiths on Akhlaq, Family & Repentance",
+        "Clear Arabic tashkeel with font size adjustment",
+        "In-depth scholar commentary (Sharh) & authentic grading",
+      ],
+    ),
   ];
 
   Future<void> sendMessage(String userText) async {
@@ -417,6 +445,71 @@ class IslamicAiService extends ChangeNotifier {
         suggestedRouteLabel: "Open Holy Quran",
         arabicReference: "إِنَّ هَٰذَا ٱلْقُرْءَانَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ",
         englishReference: "“Indeed, this Quran guides to that which is most suitable.” (Surah Al-Isra 17:9)",
+      );
+    }
+
+    // Stories of the Prophets (Qisas al-Anbiya)
+    if (lower.contains("prophet") ||
+        lower.contains("anbiya") ||
+        lower.contains("messenger") ||
+        lower.contains("adam") ||
+        lower.contains("nuh") ||
+        lower.contains("noah") ||
+        lower.contains("ibrahim") ||
+        lower.contains("abraham") ||
+        lower.contains("musa") ||
+        lower.contains("moses") ||
+        lower.contains("isa") ||
+        lower.contains("jesus") ||
+        lower.contains("yunus") ||
+        lower.contains("jonah") ||
+        lower.contains("yusuf") ||
+        lower.contains("joseph") ||
+        lower.contains("sulaiman") ||
+        lower.contains("solomon") ||
+        lower.contains("dawood") ||
+        lower.contains("david") ||
+        lower.contains("ayyub") ||
+        lower.contains("job") ||
+        lower.contains("miracle")) {
+      return AiChatMessage(
+        isUser: false,
+        text:
+            "The Quran documents the sacred lives of **25 noble Prophets of Allah**, from Adam (AS) to the seal of the Prophets Muhammad (ﷺ).\n\n"
+            "Each Prophet exemplified supreme patience (Sabr), unwavering trust in Allah (Tawakkul), and delivered the timeless message of Tawhid.\n\n"
+            "In MyIslam, you can explore the complete chronicles of all 25 Prophets—including their historical eras, divine miracles (*Al-Mu'jizat*), life milestones, and the authentic Quranic Duas they supplicated during their moments of trial.\n\n"
+            "Tap below to open **Stories of the Prophets**!",
+        suggestedRoute: "prophets",
+        suggestedRouteLabel: "Explore 25 Prophets",
+        arabicReference: "وَرُسُلًا قَدْ قَصَصْنَاهُمْ عَلَيْكَ مِن قَبْلُ",
+        englishReference: "“And [We sent] messengers about whom We have related [their stories] to you before...” (Surah An-Nisa 4:164)",
+      );
+    }
+
+    // Hadith & Sunnah inquiries
+    if (lower.contains("hadith") ||
+        lower.contains("hadeeth") ||
+        lower.contains("sunnah") ||
+        lower.contains("nawawi") ||
+        lower.contains("bukhari") ||
+        lower.contains("muslim") ||
+        lower.contains("saying of the prophet") ||
+        lower.contains("saying of prophet") ||
+        lower.contains("40 hadith") ||
+        lower.contains("forty hadith")) {
+      return AiChatMessage(
+        isUser: false,
+        text:
+            "The **Hadith** represents the authentic words, actions, approvals, and noble character of the Prophet Muhammad (ﷺ), serving as the second primary source of Islamic guidance alongside the Holy Quran.\n\n"
+            "In MyIslam's **Hadith Explorer**, you can study:\n"
+            "• **The Renowned 40 Hadith of Imam An-Nawawi** (Al-Arba'in An-Nawawiyyah), universally celebrated as the pillars of Islamic wisdom.\n"
+            "• **Thematic Sahih Collections** on Faith & Sincerity, Noble Akhlaq, Kindness to Parents & Family, and Sincere Repentance.\n"
+            "• Clear Arabic tashkeel with font resizer, translations, and scholar commentaries (*Sharh*).\n\n"
+            "Tap below to begin exploring!",
+        suggestedRoute: "hadith",
+        suggestedRouteLabel: "Open Hadith Explorer",
+        arabicReference: "مَّن يُطِعِ الرَّسُولَ فَقَدْ أَطَاعَ اللَّهَ",
+        englishReference: "“He who obeys the Messenger has indeed obeyed Allah.” (Surah An-Nisa 4:80)",
       );
     }
 
