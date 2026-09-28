@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 
@@ -57,7 +58,7 @@ class _Holographic3dCardState extends State<Holographic3dCard>
     super.dispose();
   }
 
-  void _onPointerMove(PointerMoveEvent event, Size size) {
+  void _onPointerMove(PointerEvent event, Size size) {
     if (size.width == 0 || size.height == 0) return;
     final normX = (event.localPosition.dx / size.width).clamp(0.0, 1.0);
     final normY = (event.localPosition.dy / size.height).clamp(0.0, 1.0);

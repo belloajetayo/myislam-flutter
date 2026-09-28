@@ -378,6 +378,7 @@ class LocalHadithsData {
   ];
 
   /// Categorized Thematic Collections
+  static List<HadithCategory> get thematicCategories => categories;
   static const List<HadithCategory> categories = [
     HadithCategory(
       id: 1,
