@@ -116,7 +116,11 @@ class StorageService extends ChangeNotifier {
   }
 
   Future<void> incrementQuranPages() async {
-    _quranPagesRead++;
+    addQuranPages(1);
+  }
+
+  Future<void> addQuranPages(int delta) async {
+    _quranPagesRead = (_quranPagesRead + delta).clamp(0, 604);
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_quranPagesKey, _quranPagesRead);

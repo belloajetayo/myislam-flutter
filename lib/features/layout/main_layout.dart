@@ -18,6 +18,7 @@ import '../tasbih/tasbih_screen.dart';
 import '../calendar/hijri_calendar_screen.dart';
 import '../prophets/prophets_screen.dart';
 import '../hadith/hadiths_screen.dart';
+import '../progress/progress_screen.dart';
 import '../ai_companion/myislam_ai_floating_button.dart';
 
 class MainLayout extends StatefulWidget {
@@ -97,6 +98,8 @@ class _MainLayoutState extends State<MainLayout> {
           return ProphetsScreen(onBack: () => setState(() => _activeSubRoute = null));
         case "hadith":
           return HadithsScreen(onBack: () => setState(() => _activeSubRoute = null));
+        case "progress":
+          return ProgressScreen(onBack: () => setState(() => _activeSubRoute = null));
       }
     }
 

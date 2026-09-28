@@ -11,6 +11,7 @@ import 'widgets/progress_tracker_card.dart';
 import 'widgets/daily_cards_carousel.dart';
 import 'widgets/islamic_feed_card.dart';
 import 'widgets/islamic_calendar_card.dart';
+import 'widgets/community_feed_card.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(String routeName) onNavigate;
@@ -404,9 +405,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
 
-              // 5. Today's Spiritual Goal Progress Ring (Inspired by Image 3)
+              // 5. Today's Spiritual Goal Progress (Progress.tsx)
               ProgressTrackerCard(
-                onDetailsTap: () => widget.onNavigate("profile"),
+                onDetailsTap: () => widget.onNavigate("progress"),
               ),
               const SizedBox(height: 20),
 
@@ -422,6 +423,10 @@ class _HomeScreenState extends State<HomeScreen> {
               IslamicCalendarCard(
                 onTap: () => widget.onNavigate("calendar"),
               ),
+              const SizedBox(height: 20),
+
+              // 9. Community Feed Reflections & Discussions (CommunityFeed.tsx)
+              const CommunityFeedCard(),
             ],
           ),
         ),

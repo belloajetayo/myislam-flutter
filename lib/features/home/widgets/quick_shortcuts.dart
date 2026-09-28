@@ -1,91 +1,111 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
 
-class QuickShortcuts extends StatelessWidget {
+class QuickShortcuts extends StatefulWidget {
   final Function(String routeName) onNavigate;
 
   const QuickShortcuts({super.key, required this.onNavigate});
 
-  // 6 Primary Pastel Squircle Cards (Inspired by Image 2 & Image 5)
-  static const List<Map<String, dynamic>> _primaryTools = [
+  @override
+  State<QuickShortcuts> createState() => _QuickShortcutsState();
+}
+
+class _QuickShortcutsState extends State<QuickShortcuts> {
+  bool _expanded = false;
+
+  static const List<Map<String, dynamic>> _primaryShortcuts = [
     {
-      "label": "Holy Quran",
-      "arabic": "القرآن الكريم",
-      "subtitle": "114 Surahs • Audio",
       "icon": Icons.menu_book_rounded,
-      "color": Color(0xFF059669),
-      "gradient": [Color(0xFF10B981), Color(0xFF0D9488)],
-      "pastelBgLight": Color(0xFFECFDF5),
-      "pastelBgDark": Color(0xFF063326),
+      "label": "Quran",
+      "colors": [Color(0xFF10B981), Color(0xFF0D9488)],
       "route": "quran",
-      "badge": "Mushaf",
     },
     {
-      "label": "Prayer Times",
-      "arabic": "مواقيت الصلاة",
-      "subtitle": "Adhan & Countdown",
-      "icon": Icons.access_time_filled_rounded,
-      "color": Color(0xFF3B82F6),
-      "gradient": [Color(0xFF3B82F6), Color(0xFF6366F1)],
-      "pastelBgLight": Color(0xFFF0F9FF),
-      "pastelBgDark": Color(0xFF082F49),
+      "icon": Icons.volunteer_activism_rounded,
+      "label": "Salat",
+      "colors": [Color(0xFF3B82F6), Color(0xFF4F46E5)],
       "route": "prayer",
     },
     {
-      "label": "Qiblah Compass",
-      "arabic": "اتجاه القبلة",
-      "subtitle": "Sensor Direction",
-      "icon": Icons.explore_rounded,
-      "color": Color(0xFF10B981),
-      "gradient": [Color(0xFF34D399), Color(0xFF059669)],
-      "pastelBgLight": Color(0xFFF0FDF4),
-      "pastelBgDark": Color(0xFF052E16),
-      "route": "qiblah",
+      "icon": Icons.water_drop_rounded,
+      "label": "Zakat",
+      "colors": [Color(0xFFF59E0B), Color(0xFFEA580C)],
+      "route": "zakat",
     },
     {
-      "label": "Digital Tasbih",
-      "arabic": "المسبحة الإلكترونية",
-      "subtitle": "Dhikr & Counter",
-      "icon": Icons.fingerprint_rounded,
-      "color": Color(0xFF0284C7),
-      "gradient": [Color(0xFF38BDF8), Color(0xFF2563EB)],
-      "pastelBgLight": Color(0xFFF0F9FF),
-      "pastelBgDark": Color(0xFF0C4A6E),
-      "route": "tasbih",
-      "badge": "Haptic",
+      "icon": Icons.nightlight_round,
+      "label": "Sawm",
+      "colors": [Color(0xFFA855F7), Color(0xFF7C3AED)],
+      "route": "fasting",
     },
     {
-      "label": "Daily Duas",
-      "arabic": "حصن المسلم",
-      "subtitle": "Morning & Evening",
-      "icon": Icons.bookmark_added_rounded,
-      "color": Color(0xFF0D9488),
-      "gradient": [Color(0xFF2DD4BF), Color(0xFF0F766E)],
-      "pastelBgLight": Color(0xFFF0FDFA),
-      "pastelBgDark": Color(0xFF042F2C),
-      "route": "duas",
-    },
-    {
-      "label": "AI Companion",
-      "arabic": "المساعد الإسلامي",
-      "subtitle": "Ask Islamic Guide",
-      "icon": Icons.auto_awesome_rounded,
-      "color": Color(0xFF7C3AED),
-      "gradient": [Color(0xFFA855F7), Color(0xFF6D28D9)],
-      "pastelBgLight": Color(0xFFFAF5FF),
-      "pastelBgDark": Color(0xFF280B52),
-      "route": "ai_companion",
-      "badge": "Smart",
+      "icon": Icons.location_on_rounded,
+      "label": "Hajj",
+      "colors": [Color(0xFFF43F5E), Color(0xFFDB2777)],
+      "route": "hajj",
     },
   ];
 
-  static const List<Map<String, dynamic>> _secondaryPills = [
-    {"label": "Hadith", "icon": Icons.library_books_rounded, "route": "hadith"},
-    {"label": "Fasting", "icon": Icons.nightlight_round, "route": "fasting"},
-    {"label": "Zakat", "icon": Icons.volunteer_activism_rounded, "route": "zakat"},
-    {"label": "Prophets", "icon": Icons.auto_stories_rounded, "route": "prophets"},
-    {"label": "Hajj Guide", "icon": Icons.apartment_rounded, "route": "hajj"},
-    {"label": "Donate", "icon": Icons.favorite_rounded, "route": "donate"},
+  static const List<Map<String, dynamic>> _extraShortcuts = [
+    {
+      "icon": Icons.bookmark_added_rounded,
+      "label": "Duas",
+      "colors": [Color(0xFF14B8A6), Color(0xFF06B6D4)],
+      "route": "duas",
+    },
+    {
+      "icon": Icons.library_books_rounded,
+      "label": "Hadith",
+      "colors": [Color(0xFFF97316), Color(0xFFF59E0B)],
+      "route": "hadith",
+    },
+    {
+      "icon": Icons.star_rounded,
+      "label": "Prophet",
+      "colors": [Color(0xFFEAB308), Color(0xFFF97316)],
+      "route": "prophets",
+    },
+    {
+      "icon": Icons.calendar_month_rounded,
+      "label": "Calendar",
+      "colors": [Color(0xFF6366F1), Color(0xFF3B82F6)],
+      "route": "calendar",
+    },
+    {
+      "icon": Icons.explore_rounded,
+      "label": "Qiblah",
+      "colors": [Color(0xFF22C55E), Color(0xFF10B981)],
+      "route": "qiblah",
+    },
+    {
+      "icon": Icons.fingerprint_rounded,
+      "label": "Tasbih",
+      "colors": [Color(0xFF0284C7), Color(0xFF2563EB)],
+      "route": "tasbih",
+    },
+    {
+      "icon": Icons.favorite_rounded,
+      "label": "Donate",
+      "colors": [Color(0xFFEF4444), Color(0xFFF43F5E)],
+      "route": "donate",
+    },
+    {
+      "icon": Icons.person_rounded,
+      "label": "Profile",
+      "colors": [Color(0xFF64748B), Color(0xFF475569)],
+      "route": "profile",
+    },
+    {
+      "icon": Icons.headphones_rounded,
+      "label": "Podcasts",
+      "colors": [Color(0xFF8B5CF6), Color(0xFF6366F1)],
+      "route": "podcasts",
+    },
+    {
+      "icon": Icons.trending_up_rounded,
+      "label": "Progress",
+      "colors": [Color(0xFF2563EB), Color(0xFF4338CA)],
+      "route": "progress",
+    },
   ];
 
   @override
@@ -95,230 +115,214 @@ class QuickShortcuts extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header
+        // Title: Pillars of Islam with divider line
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Text(
-                  "Islamic Utilities",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.2,
-                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.islamicGold.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    "6 Essentials",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.islamicGold,
-                    ),
-                  ),
-                ),
-              ],
+            Text(
+              "Pillars of Islam",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: isDark ? const Color(0xFFF1F5F9) : const Color(0xFF1E293B),
+              ),
             ),
-            GestureDetector(
-              onTap: () => onNavigate("calendar"),
-              child: Text(
-                "Calendar & Events →",
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? AppColors.islamicGoldLight : AppColors.islamicIndigo,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      isDark ? const Color(0xFF4338CA) : const Color(0xFFC7D2FE),
+                      Colors.transparent,
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
+
         const SizedBox(height: 12),
 
-        // 6-Grid Pastel Squircles (Inspired by Image 2 & Image 5)
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _primaryTools.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.88,
-          ),
-          itemBuilder: (context, index) {
-            final tool = _primaryTools[index];
-            final color = tool["color"] as Color;
-            final pastelBg = isDark
-                ? (tool["pastelBgDark"] as Color)
-                : (tool["pastelBgLight"] as Color);
-            final badge = tool["badge"] as String?;
-
-            return GestureDetector(
-              onTap: () => onNavigate(tool["route"] as String),
-              behavior: HitTestBehavior.opaque,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.darkCardBg : pastelBg,
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(
-                    color: isDark
-                        ? color.withOpacity(0.28)
-                        : color.withOpacity(0.18),
-                    width: 1.2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withOpacity(isDark ? 0.12 : 0.06),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            gradient: tool["gradient"] != null
-                                ? LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: tool["gradient"] as List<Color>,
-                                  )
-                                : null,
-                            color: tool["gradient"] == null ? color : null,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: color.withOpacity(0.38),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            tool["icon"] as IconData,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                        if (badge != null)
-                          Positioned(
-                            top: -4,
-                            right: -6,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                              decoration: BoxDecoration(
-                                color: AppColors.islamicGold,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.white, width: 1),
-                              ),
-                              child: Text(
-                                badge,
-                                style: const TextStyle(
-                                  fontSize: 7.5,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      tool["label"] as String,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 1),
-                    Text(
-                      tool["arabic"] as String,
-                      style: TextStyle(
-                        fontFamily: 'Amiri',
-                        fontSize: 10,
-                        color: isDark ? Colors.white54 : color.withOpacity(0.85),
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+        // Primary 5 Pillars Grid (5 columns)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: _primaryShortcuts.map((s) {
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3),
+                child: _buildShortcutButton(
+                  icon: s["icon"] as IconData,
+                  label: s["label"] as String,
+                  colors: s["colors"] as List<Color>,
+                  onTap: () => widget.onNavigate(s["route"] as String),
+                  isDark: isDark,
                 ),
               ),
             );
-          },
+          }).toList(),
         ),
-        const SizedBox(height: 12),
 
-        // Secondary Horizontal Category Pills
-        SizedBox(
-          height: 36,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: _secondaryPills.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 8),
-            itemBuilder: (context, index) {
-              final pill = _secondaryPills[index];
+        const SizedBox(height: 10),
 
-              return GestureDetector(
-                onTap: () => onNavigate(pill["route"] as String),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.white.withOpacity(0.06) : Colors.white,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
+        // V Chevron Expand / Collapse Button
+        Center(
+          child: GestureDetector(
+            onTap: () => setState(() => _expanded = !_expanded),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF312E81).withOpacity(0.3) : const Color(0xFFEEF2FF),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isDark ? const Color(0xFF4338CA) : const Color(0xFFC7D2FE),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    _expanded ? "Less" : "More",
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF6366F1),
                     ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        pill["icon"] as IconData,
-                        size: 14,
-                        color: isDark ? AppColors.islamicGoldLight : AppColors.islamicIndigo,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        pill["label"] as String,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: 4),
+                  AnimatedRotation(
+                    turns: _expanded ? 0.5 : 0.0,
+                    duration: const Duration(milliseconds: 250),
+                    child: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: 16,
+                      color: Color(0xFF6366F1),
+                    ),
                   ),
-                ),
-              );
-            },
+                ],
+              ),
+            ),
           ),
         ),
+
+        // Collapsible Extra Shortcuts
+        AnimatedCrossFade(
+          firstChild: const SizedBox(height: 0),
+          secondChild: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: [
+                // Row 1 of extra shortcuts (5 items)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _extraShortcuts.sublist(0, 5).map((s) {
+                    return Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 3),
+                        child: _buildShortcutButton(
+                          icon: s["icon"] as IconData,
+                          label: s["label"] as String,
+                          colors: s["colors"] as List<Color>,
+                          onTap: () => widget.onNavigate(s["route"] as String),
+                          isDark: isDark,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 8),
+                // Row 2 of extra shortcuts (5 items)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _extraShortcuts.sublist(5, 10).map((s) {
+                    return Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 3),
+                        child: _buildShortcutButton(
+                          icon: s["icon"] as IconData,
+                          label: s["label"] as String,
+                          colors: s["colors"] as List<Color>,
+                          onTap: () => widget.onNavigate(s["route"] as String),
+                          isDark: isDark,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+          crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: const Duration(milliseconds: 250),
+        ),
       ],
+    );
+  }
+
+  Widget _buildShortcutButton({
+    required IconData icon,
+    required String label,
+    required List<Color> colors,
+    required VoidCallback onTap,
+    required bool isDark,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+        decoration: BoxDecoration(
+          color: isDark ? Colors.white.withOpacity(0.05) : Colors.white.withOpacity(0.85),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: isDark ? const Color(0xFF2C274E) : const Color(0xFFE2E8F0),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.2 : 0.03),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: colors,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: colors.first.withOpacity(0.35),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Icon(icon, color: Colors.white, size: 19),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: isDark ? const Color(0xFFE2E8F0) : const Color(0xFF334155),
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

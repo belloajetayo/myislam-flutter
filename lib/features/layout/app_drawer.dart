@@ -234,6 +234,10 @@ class _AppDrawerState extends State<AppDrawer> {
                     Navigator.pop(context);
                     widget.onNavigate("podcasts");
                   }),
+                  _buildSubItem("Daily Progress", Icons.trending_up_rounded, [0xFF2563EB, 0xFF4338CA], () {
+                    Navigator.pop(context);
+                    widget.onNavigate("progress");
+                  }),
                 ],
 
                 const Divider(height: 24, thickness: 0.5),

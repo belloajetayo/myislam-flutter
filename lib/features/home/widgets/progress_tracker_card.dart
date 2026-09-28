@@ -8,174 +8,183 @@ class ProgressTrackerCard extends StatelessWidget {
 
   const ProgressTrackerCard({super.key, required this.onDetailsTap});
 
-  static const List<String> dailyPrayers = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
-
   @override
   Widget build(BuildContext context) {
     final storage = context.watch<StorageService>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final completedCount = storage.prayersCompleted.length;
-    final progressPct = (completedCount / 5.0).clamp(0.0, 1.0);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkCardBg : Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header Row: Title & Completion %
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: AppColors.islamicGold.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.check_circle_rounded, color: AppColors.islamicGold, size: 18),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Daily Prayer Tracker",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        ),
-                      ),
-                      Text(
-                        "$completedCount of 5 prayed today • ${(progressPct * 100).round()}%",
-                        style: TextStyle(fontSize: 11, color: isDark ? Colors.white60 : Colors.grey),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              // Streak badge
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Color(0xFFF97316), Color(0xFFEF4444)]),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFFF97316).withOpacity(0.3),
-                      blurRadius: 6,
-                    ),
-                  ],
-                ),
-                child: Row(
+    final completedCount = storage.prayersCompleted.length;
+    final prayerPercent = (completedCount / 5.0).clamp(0.0, 1.0);
+    final streakPercent = (storage.streak / 30.0).clamp(0.0, 1.0);
+    final quranPercent = (storage.quranPagesRead / 20.0).clamp(0.0, 1.0);
+    final duasPercent = (storage.duasRead / 10.0).clamp(0.0, 1.0);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header: "Today's Progress" + "View all >"
+        GestureDetector(
+          onTap: onDetailsTap,
+          behavior: HitTestBehavior.opaque,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: [
-                    const Icon(Icons.local_fire_department_rounded, color: Colors.white, size: 14),
-                    const SizedBox(width: 3),
+                    const Icon(Icons.trending_up_rounded, color: AppColors.islamicIndigo, size: 18),
+                    const SizedBox(width: 8),
                     Text(
-                      "${storage.streak}d Streak",
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                      "Today's Progress",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      ),
                     ),
                   ],
                 ),
+                const Row(
+                  children: [
+                    Text(
+                      "View all",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF6366F1),
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(Icons.chevron_right_rounded, size: 16, color: Color(0xFF6366F1)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // 4 Stat Cards Grid
+        GestureDetector(
+          onTap: onDetailsTap,
+          child: Row(
+            children: [
+              _buildStatItem(
+                label: "Salat",
+                value: "$completedCount/5",
+                icon: Icons.track_changes_rounded,
+                colors: const [Color(0xFF6366F1), Color(0xFF2563EB)],
+                progress: prayerPercent,
+                isDark: isDark,
+              ),
+              const SizedBox(width: 8),
+              _buildStatItem(
+                label: "Streak",
+                value: "${storage.streak}d",
+                icon: Icons.local_fire_department_rounded,
+                colors: const [Color(0xFFF97316), Color(0xFFEF4444)],
+                progress: streakPercent,
+                isDark: isDark,
+              ),
+              const SizedBox(width: 8),
+              _buildStatItem(
+                label: "Quran",
+                value: "${storage.quranPagesRead}pg",
+                icon: Icons.menu_book_rounded,
+                colors: const [Color(0xFF10B981), Color(0xFF0D9488)],
+                progress: quranPercent,
+                isDark: isDark,
+              ),
+              const SizedBox(width: 8),
+              _buildStatItem(
+                label: "Duas",
+                value: "${storage.duasRead}",
+                icon: Icons.volunteer_activism_rounded,
+                colors: const [Color(0xFFA855F7), Color(0xFF7C3AED)],
+                progress: duasPercent,
+                isDark: isDark,
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
 
-          const SizedBox(height: 14),
-
-          // Linear progress indicator
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: LinearProgressIndicator(
-              value: progressPct,
-              minHeight: 6,
-              backgroundColor: isDark ? Colors.white10 : const Color(0xFFE2E8F0),
-              color: AppColors.islamicGold,
+  Widget _buildStatItem({
+    required String label,
+    required String value,
+    required IconData icon,
+    required List<Color> colors,
+    required double progress,
+    required bool isDark,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.darkCardBg : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.2 : 0.03),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // 5 Prayer Interactive Checkboxes
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: dailyPrayers.map((prayer) {
-              final isDone = storage.prayersCompleted.contains(prayer);
-
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () => storage.togglePrayer(prayer),
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isDone
-                          ? (isDark ? AppColors.islamicPurple.withOpacity(0.25) : const Color(0xFFFAF5FF))
-                          : (isDark ? Colors.white.withOpacity(0.04) : const Color(0xFFF8FAFC)),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: isDone
-                            ? AppColors.islamicPurple
-                            : (isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
-                        width: isDone ? 1.5 : 1,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          width: 22,
-                          height: 22,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isDone ? AppColors.islamicPurple : Colors.transparent,
-                            border: Border.all(
-                              color: isDone ? AppColors.islamicPurple : Colors.grey.shade400,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: isDone
-                              ? const Icon(Icons.check_rounded, color: Colors.white, size: 14)
-                              : null,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          prayer,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: isDone ? FontWeight.bold : FontWeight.w600,
-                            color: isDone
-                                ? AppColors.islamicPurple
-                                : (isDark ? Colors.white70 : AppColors.lightTextPrimary),
-                          ),
-                        ),
-                      ],
-                    ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: colors),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: colors.first.withOpacity(0.3),
+                    blurRadius: 4,
                   ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
+                ],
+              ),
+              child: Icon(icon, color: Colors.white, size: 14),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w900,
+                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                height: 1.1,
+              ),
+            ),
+            const SizedBox(height: 5),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: progress,
+                backgroundColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                valueColor: AlwaysStoppedAnimation<Color>(colors.first),
+                minHeight: 3.5,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 9.5,
+                fontWeight: FontWeight.w500,
+                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
