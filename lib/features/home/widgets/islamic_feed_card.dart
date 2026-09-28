@@ -75,10 +75,10 @@ class IslamicFeedCard extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 12),
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
+                  color: isDark ? AppColors.darkCardBg : Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
+                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
                   ),
                   boxShadow: [
                     BoxShadow(

@@ -27,10 +27,10 @@ class IslamicCalendarCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
+        color: isDark ? AppColors.darkCardBg : Colors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
         ),
         boxShadow: [
           BoxShadow(

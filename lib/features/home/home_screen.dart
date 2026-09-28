@@ -60,32 +60,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Stack(
       children: [
-        // Decorative glowing background orbs
+        // Decorative glowing background orbs (from MobileLayout.tsx)
         Positioned(
-          top: -80,
-          right: -80,
+          top: -40,
+          right: -40,
           child: Container(
-            width: 240,
-            height: 240,
+            width: 260,
+            height: 260,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isDark
-                  ? const Color(0x1F6366F1)
-                  : const Color(0x226366F1),
+                  ? const Color(0xFF6366F1).withOpacity(0.12)
+                  : const Color(0xFFC7D2FE).withOpacity(0.35),
             ),
           ),
         ),
         Positioned(
-          top: 360,
-          left: -80,
+          top: 380,
+          left: -60,
           child: Container(
-            width: 200,
-            height: 200,
+            width: 220,
+            height: 220,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isDark
-                  ? const Color(0x14059669)
-                  : const Color(0x1E059669),
+                  ? const Color(0xFF38BDF8).withOpacity(0.08)
+                  : const Color(0xFFBAE6FD).withOpacity(0.35),
             ),
           ),
         ),
@@ -95,66 +95,167 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 110),
             children: [
-              // Top Header Bar (Inspired by Image 1, 3, 5)
+              // Top Header Bar (from NavHeader.tsx in belloajetayo/myislam)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Menu Drawer Button
-                  GestureDetector(
-                    onTap: widget.onOpenDrawer,
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.white.withOpacity(0.08) : Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: isDark ? const Color(0x406366F1) : const Color(0xFFC7D2FE),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(isDark ? 0.25 : 0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(Icons.menu_rounded, color: AppColors.islamicIndigo, size: 22),
-                    ),
-                  ),
-
-                  // App Brand Title
-                  const ShiningBrandTitle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                  ),
-
-                  // Actions: Notifications + Dark Mode
+                  // Brand Logo & Subtitle
                   Row(
                     children: [
+                      // Menu Drawer Button
                       GestureDetector(
-                        onTap: () => storage.toggleDarkMode(),
+                        onTap: widget.onOpenDrawer,
                         child: Container(
-                          width: 44,
-                          height: 44,
+                          width: 40,
+                          height: 40,
+                          margin: const EdgeInsets.only(right: 10),
                           decoration: BoxDecoration(
                             color: isDark ? Colors.white.withOpacity(0.08) : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                              color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
+                              color: isDark ? const Color(0xFF2C274E) : const Color(0xFFE2E8F0),
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(isDark ? 0.25 : 0.05),
-                                blurRadius: 10,
+                                color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            Icons.menu_rounded,
+                            color: isDark ? AppColors.primaryGoldLight : AppColors.islamicIndigo,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+
+                      // Logo Icon Badge (gradient-primary with "م")
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: AppColors.primaryBrandGradient,
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primaryGold.withOpacity(0.35),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "م",
+                            style: TextStyle(
+                              fontFamily: 'Amiri',
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+
+                      // App Name & Tagline
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const ShiningBrandTitle(
+                            text: "MyIslam",
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.4,
+                          ),
+                          Text(
+                            "Faith & Practice",
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w500,
+                              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // Actions: Theme toggle, Notification bell, Profile
+                  Row(
+                    children: [
+                      // Dark / Light Mode Toggle
+                      GestureDetector(
+                        onTap: () => storage.toggleDarkMode(),
+                        child: Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: isDark ? Colors.white.withOpacity(0.08) : Colors.white,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: isDark ? const Color(0xFF2C274E) : const Color(0xFFE2E8F0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                                blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
                             ],
                           ),
                           child: Icon(
                             storage.darkMode ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
-                            color: storage.darkMode ? const Color(0xFFFBBF24) : AppColors.islamicIndigo,
-                            size: 20,
+                            color: storage.darkMode ? AppColors.primaryGoldLight : AppColors.islamicIndigo,
+                            size: 18,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+
+                      // Notification Bell with indicator dot
+                      GestureDetector(
+                        onTap: () => widget.onNavigate("prayer"),
+                        child: Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: isDark ? Colors.white.withOpacity(0.08) : Colors.white,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: isDark ? const Color(0xFF2C274E) : const Color(0xFFE2E8F0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Icon(
+                                Icons.notifications_none_rounded,
+                                color: isDark ? Colors.white70 : const Color(0xFF475569),
+                                size: 19,
+                              ),
+                              Positioned(
+                                top: 9,
+                                right: 9,
+                                child: Container(
+                                  width: 6,
+                                  height: 6,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primaryGold,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

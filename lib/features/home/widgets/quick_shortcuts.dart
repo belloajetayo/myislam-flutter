@@ -13,7 +13,8 @@ class QuickShortcuts extends StatelessWidget {
       "arabic": "القرآن الكريم",
       "subtitle": "114 Surahs • Audio",
       "icon": Icons.menu_book_rounded,
-      "color": Color(0xFF059669), // Emerald
+      "color": Color(0xFF059669),
+      "gradient": [Color(0xFF10B981), Color(0xFF0D9488)],
       "pastelBgLight": Color(0xFFECFDF5),
       "pastelBgDark": Color(0xFF063326),
       "route": "quran",
@@ -24,7 +25,8 @@ class QuickShortcuts extends StatelessWidget {
       "arabic": "مواقيت الصلاة",
       "subtitle": "Adhan & Countdown",
       "icon": Icons.access_time_filled_rounded,
-      "color": Color(0xFF0284C7), // Sky Blue
+      "color": Color(0xFF3B82F6),
+      "gradient": [Color(0xFF3B82F6), Color(0xFF6366F1)],
       "pastelBgLight": Color(0xFFF0F9FF),
       "pastelBgDark": Color(0xFF082F49),
       "route": "prayer",
@@ -34,9 +36,10 @@ class QuickShortcuts extends StatelessWidget {
       "arabic": "اتجاه القبلة",
       "subtitle": "Sensor Direction",
       "icon": Icons.explore_rounded,
-      "color": Color(0xFFD97706), // Warm Amber
-      "pastelBgLight": Color(0xFFFFFBEB),
-      "pastelBgDark": Color(0xFF3B2404),
+      "color": Color(0xFF10B981),
+      "gradient": [Color(0xFF34D399), Color(0xFF059669)],
+      "pastelBgLight": Color(0xFFF0FDF4),
+      "pastelBgDark": Color(0xFF052E16),
       "route": "qiblah",
     },
     {
@@ -44,9 +47,10 @@ class QuickShortcuts extends StatelessWidget {
       "arabic": "المسبحة الإلكترونية",
       "subtitle": "Dhikr & Counter",
       "icon": Icons.fingerprint_rounded,
-      "color": Color(0xFF0D9488), // Teal
-      "pastelBgLight": Color(0xFFF0FDFA),
-      "pastelBgDark": Color(0xFF042F2C),
+      "color": Color(0xFF0284C7),
+      "gradient": [Color(0xFF38BDF8), Color(0xFF2563EB)],
+      "pastelBgLight": Color(0xFFF0F9FF),
+      "pastelBgDark": Color(0xFF0C4A6E),
       "route": "tasbih",
       "badge": "Haptic",
     },
@@ -55,9 +59,10 @@ class QuickShortcuts extends StatelessWidget {
       "arabic": "حصن المسلم",
       "subtitle": "Morning & Evening",
       "icon": Icons.bookmark_added_rounded,
-      "color": Color(0xFFE11D48), // Rose
-      "pastelBgLight": Color(0xFFFFF1F2),
-      "pastelBgDark": Color(0xFF380714),
+      "color": Color(0xFF0D9488),
+      "gradient": [Color(0xFF2DD4BF), Color(0xFF0F766E)],
+      "pastelBgLight": Color(0xFFF0FDFA),
+      "pastelBgDark": Color(0xFF042F2C),
       "route": "duas",
     },
     {
@@ -65,7 +70,8 @@ class QuickShortcuts extends StatelessWidget {
       "arabic": "المساعد الإسلامي",
       "subtitle": "Ask Islamic Guide",
       "icon": Icons.auto_awesome_rounded,
-      "color": Color(0xFF7C3AED), // Purple
+      "color": Color(0xFF7C3AED),
+      "gradient": [Color(0xFFA855F7), Color(0xFF6D28D9)],
       "pastelBgLight": Color(0xFFFAF5FF),
       "pastelBgDark": Color(0xFF280B52),
       "route": "ai_companion",
@@ -189,7 +195,14 @@ class QuickShortcuts extends StatelessWidget {
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                            color: color,
+                            gradient: tool["gradient"] != null
+                                ? LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: tool["gradient"] as List<Color>,
+                                  )
+                                : null,
+                            color: tool["gradient"] == null ? color : null,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(

@@ -23,30 +23,33 @@ class CustomBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Modern Floating Capsule Pill (Inspired by Image 1 & Image 4)
+    // Floating Capsule Bar (from BottomNavigation.tsx in belloajetayo/myislam)
     return SafeArea(
       top: false,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF131028) : const Color(0xFF1E1B38),
-          borderRadius: BorderRadius.circular(36),
+          color: isDark
+              ? const Color(0xFF16162A).withOpacity(0.96)
+              : Colors.white.withOpacity(0.96),
+          borderRadius: BorderRadius.circular(32),
           border: Border.all(
-            color: isDark ? const Color(0xFF382F5E) : const Color(0xFF3B3363),
+            color: isDark ? const Color(0xFF2C274E) : const Color(0xFFE2E8F0),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.35),
-              blurRadius: 28,
-              offset: const Offset(0, 10),
+              color: Colors.black.withOpacity(isDark ? 0.35 : 0.08),
+              blurRadius: 30,
+              offset: const Offset(0, 8),
             ),
-            BoxShadow(
-              color: const Color(0xFF7E22CE).withOpacity(0.18),
-              blurRadius: 20,
-              offset: const Offset(0, 4),
-            ),
+            if (isDark)
+              BoxShadow(
+                color: const Color(0xFF6366F1).withOpacity(0.12),
+                blurRadius: 16,
+                offset: const Offset(0, 2),
+              ),
           ],
         ),
         child: Row(
@@ -60,20 +63,18 @@ class CustomBottomNavigation extends StatelessWidget {
                 onTap: () => onTabSelected(index),
                 behavior: HitTestBehavior.opaque,
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
+                  duration: const Duration(milliseconds: 200),
                   curve: Curves.easeInOut,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    gradient: isSelected
-                        ? AppColors.purpleGoldShiningGradient
-                        : null,
-                    borderRadius: BorderRadius.circular(24),
+                    gradient: isSelected ? AppColors.activeNavPillGradient : null,
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: const Color(0xFF8B5CF6).withOpacity(0.4),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
+                              color: const Color(0xFF6366F1).withOpacity(0.4),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
                             ),
                           ]
                         : null,
@@ -84,16 +85,19 @@ class CustomBottomNavigation extends StatelessWidget {
                       Icon(
                         item["icon"] as IconData,
                         size: 20,
-                        color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+                        color: isSelected
+                            ? Colors.white
+                            : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
                       ),
                       const SizedBox(height: 3),
                       Text(
                         item["label"] as String,
                         style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
-                          letterSpacing: 0.2,
-                          color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+                          fontSize: 10.5,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          color: isSelected
+                              ? Colors.white
+                              : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
                         ),
                       ),
                     ],

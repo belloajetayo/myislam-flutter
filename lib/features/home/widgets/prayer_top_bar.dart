@@ -46,7 +46,7 @@ class PrayerTopBar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final times = prayerService.times.toMap();
     final current = prayerService.currentPrayer;
-    final gradient = isDark ? AppColors.purpleGoldHeroGradient : AppColors.purpleGoldShiningGradient;
+    final gradient = isDark ? AppColors.prayerHeroDarkGradient : AppColors.prayerHeroLightGradient;
 
     return GestureDetector(
       onTap: onTap,
@@ -57,13 +57,13 @@ class PrayerTopBar extends StatelessWidget {
           gradient: gradient,
           borderRadius: BorderRadius.circular(28),
           border: Border.all(
-            color: AppColors.islamicGold.withOpacity(isDark ? 0.35 : 0.4),
-            width: 1.5,
+            color: Colors.white.withOpacity(isDark ? 0.15 : 0.25),
+            width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: gradient.colors.first.withOpacity(isDark ? 0.45 : 0.25),
-              blurRadius: 22,
+              color: const Color(0xFF6366F1).withOpacity(isDark ? 0.35 : 0.22),
+              blurRadius: 24,
               offset: const Offset(0, 8),
             ),
           ],

@@ -202,7 +202,7 @@ class _PrayerScreenState extends State<PrayerScreen> {
                   color: isDark ? AppColors.darkCardBg : Colors.white,
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
-                    color: isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0),
+                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -227,7 +227,7 @@ class _PrayerScreenState extends State<PrayerScreen> {
                         duration: const Duration(milliseconds: 200),
                         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
                         decoration: BoxDecoration(
-                          gradient: isSelected ? AppColors.purpleGoldShiningGradient : null,
+                          gradient: isSelected ? AppColors.activeNavPillGradient : null,
                           color: isSelected ? null : Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -705,13 +705,23 @@ class _PrayerScreenState extends State<PrayerScreen> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
+          gradient: isSelected ? AppColors.activeNavPillGradient : null,
           color: isSelected
-              ? (isDark ? Colors.white : const Color(0xFF1E1B38))
+              ? null
               : (isDark ? Colors.white.withOpacity(0.06) : Colors.white),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? Colors.transparent : (isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+            color: isSelected ? Colors.transparent : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
           ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF6366F1).withOpacity(0.35),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -720,7 +730,7 @@ class _PrayerScreenState extends State<PrayerScreen> {
               icon,
               size: 13,
               color: isSelected
-                  ? (isDark ? Colors.black : Colors.white)
+                  ? Colors.white
                   : (isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
             ),
             const SizedBox(width: 5),
@@ -730,7 +740,7 @@ class _PrayerScreenState extends State<PrayerScreen> {
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
                 color: isSelected
-                    ? (isDark ? Colors.black : Colors.white)
+                    ? Colors.white
                     : (isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
               ),
             ),

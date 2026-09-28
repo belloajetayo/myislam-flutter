@@ -1,40 +1,70 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Brand Islamic Colors - Purple & Gold Signature (myislam2.vercel.app)
+  // Brand Islamic Colors - Rich Gold & Deep Spiritual Purple (from belloajetayo/myislam)
+  // Primary Gold (hsl(38 92% 50%))
+  static const Color primaryGold = Color(0xFFF59E0B);
+  static const Color primaryGoldLight = Color(0xFFFBBF24);
+  static const Color primaryGoldDark = Color(0xFFD97706);
   static const Color islamicGold = Color(0xFFF59E0B);
   static const Color islamicGoldLight = Color(0xFFFBBF24);
   static const Color islamicGoldDark = Color(0xFFD97706);
-  static const Color islamicPurple = Color(0xFF8B5CF6);
-  static const Color islamicPurpleDeep = Color(0xFF7E22CE);
-  static const Color islamicPurpleDark = Color(0xFF6D28D9);
-  static const Color islamicGreen = Color(0xFF10B981);
-  static const Color islamicTeal = Color(0xFF0D9488);
+
+  // Secondary Deep Spiritual Purple (hsl(270 50% 45%)) & Indigo (from belloajetayo/myislam)
+  static const Color secondaryPurple = Color(0xFF7938B0);
+  static const Color secondaryPurpleLight = Color(0xFF9D62D2);
+  static const Color islamicPurple = Color(0xFF7938B0);
+  static const Color islamicPurpleDeep = Color(0xFF6D28D9);
+  static const Color islamicPurpleDark = Color(0xFF581C87);
   static const Color islamicIndigo = Color(0xFF6366F1);
+  static const Color islamicIndigoDeep = Color(0xFF4F46E5);
+
+  // Accent Teal & Islamic Emerald
+  static const Color accentTeal = Color(0xFF0D9488);
+  static const Color accentCyan = Color(0xFF06B6D4);
+  static const Color islamicGreen = Color(0xFF10B981);
+  static const Color islamicEmerald = Color(0xFF059669);
+  static const Color islamicTeal = Color(0xFF0D9488);
   static const Color islamicRose = Color(0xFFF43F5E);
   static const Color islamicSky = Color(0xFF0EA5E9);
+  static const Color islamicSkyLight = Color(0xFF38BDF8);
 
-  // Dark Mode Palette (myislam2 deep violet-black: hsl(240 15% 6%))
-  static const Color darkBgStart = Color(0xFF0C0A17);
-  static const Color darkBgMid = Color(0xFF15102A);
-  static const Color darkBgEnd = Color(0xFF0C0A17);
-  static const Color darkCardBg = Color(0xFF18142E);
-  static const Color darkSurface = Color(0xFF18142E);
-  static const Color darkBorder = Color(0xFF2C254C);
-  static const Color darkTextPrimary = Color(0xFFFAF7F2);
-  static const Color darkTextSecondary = Color(0xFF9E97B8);
+  // Light Mode Palette (from MobileLayout.tsx: bg-gradient-to-br from-indigo-50 via-blue-50 to-sky-100)
+  static const Color lightBgStart = Color(0xFFEEF2FF); // indigo-50
+  static const Color lightBgMid = Color(0xFFEFF6FF);   // blue-50
+  static const Color lightBgEnd = Color(0xFFE0F2FE);   // sky-100
+  static const Color lightCardBg = Colors.white;       // Pure white card
+  static const Color lightSurface = Color(0xFFF8FAFC); // Subtle surface
+  static const Color lightBorder = Color(0xFFE2E8F0);  // slate-200 border
+  static const Color lightBorderAccent = Color(0xFFE0E7FF); // indigo-100
+  static const Color lightTextPrimary = Color(0xFF1E1B4B); // indigo-950 deep navy
+  static const Color lightTextSecondary = Color(0xFF64748B); // slate-500
+  static const Color lightMuted = Color(0xFFF1F5F9);   // slate-100
 
-  // Light Mode Palette (Sea Blue Theme)
-  static const Color lightBgStart = Color(0xFFE8F4FD); // Gentle Sea Blue
-  static const Color lightBgMid = Color(0xFFDCF0FB);   // Soft Coastal Sea Blue
-  static const Color lightBgEnd = Color(0xFFCEE9FA);   // Radiant Azure Sea Blue
-  static const Color lightCardBg = Colors.white;       // Crisp white cards pop on sea blue
-  static const Color lightSurface = Color(0xFFF0F7FD); // Very subtle sea tint surface
-  static const Color lightBorder = Color(0xFFBAE0F8);  // Sea Blue border
-  static const Color lightTextPrimary = Color(0xFF0C1E33); // Deep ocean navy
-  static const Color lightTextSecondary = Color(0xFF3B566E); // Sea slate navy
+  // Dark Mode Palette (from MobileLayout.tsx: linear-gradient(160deg, #0f0c29 0%, #1a1a4e 40%, #0f2027 100%))
+  static const Color darkBgStart = Color(0xFF0F0C29);
+  static const Color darkBgMid = Color(0xFF1A1A4E);
+  static const Color darkBgEnd = Color(0xFF0F2027);
+  static const Color darkCardBg = Color(0xFF16162A);
+  static const Color darkSurface = Color(0xFF131326);
+  static const Color darkBorder = Color(0xFF282548);
+  static const Color darkBorderAccent = Color(0xFF3730A3);
+  static const Color darkTextPrimary = Color(0xFFFAF7F2); // Warm light cream
+  static const Color darkTextSecondary = Color(0xFF94A3B8); // slate-400
+  static const Color darkMuted = Color(0xFF1F1D38);
 
-  // Shining Purple-Gold Brand Gradient (Signature from myislam2.vercel.app)
+  // Signature Web Gradients (from src/index.css & MobileLayout.tsx in belloajetayo/myislam)
+  // --gradient-primary: linear-gradient(135deg, hsl(38 92% 55%) 0%, hsl(28 90% 48%) 50%, hsl(270 50% 50%) 100%)
+  static const LinearGradient primaryBrandGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFFF59E0B), // Rich Gold
+      Color(0xFFEA580C), // Warm Amber / Sunset
+      Color(0xFF7938B0), // Deep Spiritual Purple
+    ],
+  );
+
   static const LinearGradient purpleGoldShiningGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
@@ -46,13 +76,45 @@ class AppColors {
     ],
   );
 
+  // Active Pill & Nav Button Gradient (from BottomNavigation.tsx: bg-gradient-to-br from-indigo-500 to-purple-600)
+  static const LinearGradient activeNavPillGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF6366F1), // Indigo 500
+      Color(0xFF7C3AED), // Purple 600
+    ],
+  );
+
+  // Light Prayer Hero Gradient (from PrayerTopBar.tsx: from-indigo-500 via-blue-500 to-sky-400)
+  static const LinearGradient prayerHeroLightGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF6366F1), // Indigo 500
+      Color(0xFF3B82F6), // Blue 500
+      Color(0xFF38BDF8), // Sky 400
+    ],
+  );
+
+  // Dark Prayer Hero Gradient (from PrayerTopBar.tsx: from-indigo-950 via-blue-900 to-slate-900)
+  static const LinearGradient prayerHeroDarkGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF1E1B4B), // Indigo 950
+      Color(0xFF1E3A5F), // Deep Oceanic Navy
+      Color(0xFF0F2027), // Midnight Slate
+    ],
+  );
+
   static const LinearGradient purpleGoldHeroGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF241544),
-      Color(0xFF381F66),
-      Color(0xFF1C0E36),
+      Color(0xFF1E1B4B),
+      Color(0xFF2E1065),
+      Color(0xFF172554),
     ],
   );
 
