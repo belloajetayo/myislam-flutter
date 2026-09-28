@@ -6,81 +6,80 @@ class QuickShortcuts extends StatelessWidget {
 
   const QuickShortcuts({super.key, required this.onNavigate});
 
-  static final List<Map<String, dynamic>> _tools = [
+  // 6 Primary Pastel Squircle Cards (Inspired by Image 2 & Image 5)
+  static const List<Map<String, dynamic>> _primaryTools = [
     {
-      "label": "Quran",
-      "arabic": "القرآن",
+      "label": "Holy Quran",
+      "arabic": "القرآن الكريم",
+      "subtitle": "114 Surahs • Audio",
       "icon": Icons.menu_book_rounded,
-      "gradient": AppColors.purpleGoldShiningGradient,
+      "color": Color(0xFF059669), // Emerald
+      "pastelBgLight": Color(0xFFECFDF5),
+      "pastelBgDark": Color(0xFF063326),
       "route": "quran",
       "badge": "Mushaf",
     },
     {
-      "label": "Tasbih",
-      "arabic": "السبحة",
-      "icon": Icons.fingerprint_rounded,
-      "gradient": AppColors.tasbihGradient,
-      "route": "tasbih",
-      "badge": "Dhikr",
-    },
-    {
-      "label": "Duas",
-      "arabic": "الأدعية",
-      "icon": Icons.bookmark_added_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFF0D9488), Color(0xFF14B8A6)]),
-      "route": "duas",
-    },
-    {
-      "label": "Qiblah",
-      "arabic": "القبلة",
-      "icon": Icons.explore_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFFD97706), Color(0xFFF59E0B)]),
-      "route": "qiblah",
-    },
-    {
-      "label": "Prayers",
-      "arabic": "الصلوات",
+      "label": "Prayer Times",
+      "arabic": "مواقيت الصلاة",
+      "subtitle": "Adhan & Countdown",
       "icon": Icons.access_time_filled_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFF0284C7), Color(0xFF0EA5E9)]),
+      "color": Color(0xFF0284C7), // Sky Blue
+      "pastelBgLight": Color(0xFFF0F9FF),
+      "pastelBgDark": Color(0xFF082F49),
       "route": "prayer",
     },
     {
-      "label": "Fasting",
-      "arabic": "الصيام",
-      "icon": Icons.nightlight_round,
-      "gradient": const LinearGradient(colors: [Color(0xFF7C3AED), Color(0xFF8B5CF6)]),
-      "route": "fasting",
+      "label": "Qiblah Compass",
+      "arabic": "اتجاه القبلة",
+      "subtitle": "Sensor Direction",
+      "icon": Icons.explore_rounded,
+      "color": Color(0xFFD97706), // Warm Amber
+      "pastelBgLight": Color(0xFFFFFBEB),
+      "pastelBgDark": Color(0xFF3B2404),
+      "route": "qiblah",
     },
     {
-      "label": "Zakat",
-      "arabic": "الزكاة",
-      "icon": Icons.volunteer_activism_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFFEA580C), Color(0xFFF97316)]),
-      "route": "zakat",
+      "label": "Digital Tasbih",
+      "arabic": "المسبحة الإلكترونية",
+      "subtitle": "Dhikr & Counter",
+      "icon": Icons.fingerprint_rounded,
+      "color": Color(0xFF0D9488), // Teal
+      "pastelBgLight": Color(0xFFF0FDFA),
+      "pastelBgDark": Color(0xFF042F2C),
+      "route": "tasbih",
+      "badge": "Haptic",
     },
     {
-      "label": "Prophets",
-      "arabic": "الأنبياء",
-      "icon": Icons.auto_stories_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFF7E22CE), Color(0xFFA855F7)]),
-      "route": "prophets",
-      "badge": "25 Anbiya",
+      "label": "Daily Duas",
+      "arabic": "حصن المسلم",
+      "subtitle": "Morning & Evening",
+      "icon": Icons.bookmark_added_rounded,
+      "color": Color(0xFFE11D48), // Rose
+      "pastelBgLight": Color(0xFFFFF1F2),
+      "pastelBgDark": Color(0xFF380714),
+      "route": "duas",
     },
     {
-      "label": "Hadith",
-      "arabic": "الحديث",
-      "icon": Icons.menu_book_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFF0EA5E9), Color(0xFF6366F1)]),
-      "route": "hadith",
-      "badge": "40 Nawawi",
+      "label": "AI Companion",
+      "arabic": "المساعد الإسلامي",
+      "subtitle": "Ask Islamic Guide",
+      "icon": Icons.auto_awesome_rounded,
+      "color": Color(0xFF7C3AED), // Purple
+      "pastelBgLight": Color(0xFFFAF5FF),
+      "pastelBgDark": Color(0xFF280B52),
+      "route": "ai_companion",
+      "badge": "Smart",
     },
-    {
-      "label": "Radio",
-      "arabic": "إذاعة",
-      "icon": Icons.headphones_rounded,
-      "gradient": const LinearGradient(colors: [Color(0xFF2563EB), Color(0xFF3B82F6)]),
-      "route": "podcasts",
-    },
+  ];
+
+  static const List<Map<String, dynamic>> _secondaryPills = [
+    {"label": "Hadith", "icon": Icons.library_books_rounded, "route": "hadith"},
+    {"label": "Fasting", "icon": Icons.nightlight_round, "route": "fasting"},
+    {"label": "Zakat", "icon": Icons.volunteer_activism_rounded, "route": "zakat"},
+    {"label": "Prophets", "icon": Icons.auto_stories_rounded, "route": "prophets"},
+    {"label": "Hajj Guide", "icon": Icons.apartment_rounded, "route": "hajj"},
+    {"label": "Donate", "icon": Icons.favorite_rounded, "route": "donate"},
   ];
 
   @override
@@ -90,66 +89,93 @@ class QuickShortcuts extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title Row
+        // Header
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Islamic Utilities",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                letterSpacing: -0.2,
-                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-              ),
+            Row(
+              children: [
+                Text(
+                  "Islamic Utilities",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.2,
+                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppColors.islamicGold.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    "6 Essentials",
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.islamicGold,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: AppColors.islamicPurple.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                "MyIslam Suite",
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.islamicPurple),
+            GestureDetector(
+              onTap: () => onNavigate("calendar"),
+              child: Text(
+                "Calendar & Events →",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? AppColors.islamicGoldLight : AppColors.islamicIndigo,
+                ),
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
 
-        // 8-Tool Grid (2 rows of 4)
+        // 6-Grid Pastel Squircles (Inspired by Image 2 & Image 5)
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: _tools.length,
+          itemCount: _primaryTools.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 10,
-            childAspectRatio: 0.85,
+            crossAxisCount: 3,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.88,
           ),
           itemBuilder: (context, index) {
-            final tool = _tools[index];
-            final gradient = tool["gradient"] as LinearGradient;
+            final tool = _primaryTools[index];
+            final color = tool["color"] as Color;
+            final pastelBg = isDark
+                ? (tool["pastelBgDark"] as Color)
+                : (tool["pastelBgLight"] as Color);
             final badge = tool["badge"] as String?;
 
             return GestureDetector(
               onTap: () => onNavigate(tool["route"] as String),
               behavior: HitTestBehavior.opaque,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  color: isDark ? AppColors.darkCardBg : pastelBg,
+                  borderRadius: BorderRadius.circular(22),
                   border: Border.all(
-                    color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
+                    color: isDark
+                        ? color.withOpacity(0.28)
+                        : color.withOpacity(0.18),
+                    width: 1.2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+                      color: color.withOpacity(isDark ? 0.12 : 0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
@@ -163,63 +189,121 @@ class QuickShortcuts extends StatelessWidget {
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                            gradient: gradient,
-                            borderRadius: BorderRadius.circular(15),
+                            color: color,
+                            borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: gradient.colors.first.withOpacity(0.35),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
+                                color: color.withOpacity(0.38),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
-                          child: Icon(tool["icon"] as IconData, color: Colors.white, size: 22),
+                          child: Icon(
+                            tool["icon"] as IconData,
+                            color: Colors.white,
+                            size: 22,
+                          ),
                         ),
                         if (badge != null)
                           Positioned(
                             top: -4,
                             right: -6,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                               decoration: BoxDecoration(
-                                gradient: AppColors.goldGradient,
+                                color: AppColors.islamicGold,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.white, width: 1),
                               ),
                               child: Text(
                                 badge,
-                                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Colors.white),
+                                style: const TextStyle(
+                                  fontSize: 7.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                       ],
                     ),
-                    const SizedBox(height: 7),
+                    const SizedBox(height: 8),
                     Text(
                       tool["label"] as String,
                       style: TextStyle(
                         fontSize: 11,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                         color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                     ),
+                    const SizedBox(height: 1),
                     Text(
                       tool["arabic"] as String,
                       style: TextStyle(
                         fontFamily: 'Amiri',
                         fontSize: 10,
-                        color: isDark ? Colors.white54 : Colors.grey,
+                        color: isDark ? Colors.white54 : color.withOpacity(0.85),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
             );
           },
+        ),
+        const SizedBox(height: 12),
+
+        // Secondary Horizontal Category Pills
+        SizedBox(
+          height: 36,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: _secondaryPills.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 8),
+            itemBuilder: (context, index) {
+              final pill = _secondaryPills[index];
+
+              return GestureDetector(
+                onTap: () => onNavigate(pill["route"] as String),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.white.withOpacity(0.06) : Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        pill["icon"] as IconData,
+                        size: 14,
+                        color: isDark ? AppColors.islamicGoldLight : AppColors.islamicIndigo,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        pill["label"] as String,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
