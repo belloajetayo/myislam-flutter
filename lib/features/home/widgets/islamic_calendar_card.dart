@@ -146,7 +146,7 @@ class IslamicCalendarCard extends StatelessWidget {
           const SizedBox(height: 10),
 
           // Tap to view full calendar
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
@@ -157,8 +157,8 @@ class IslamicCalendarCard extends StatelessWidget {
                   color: AppColors.islamicGold,
                 ),
               ),
-              const SizedBox(width: 4),
-              const Icon(Icons.arrow_forward_rounded, size: 14, color: AppColors.islamicGold),
+              SizedBox(width: 4),
+              Icon(Icons.arrow_forward_rounded, size: 14, color: AppColors.islamicGold),
             ],
           ),
         ],

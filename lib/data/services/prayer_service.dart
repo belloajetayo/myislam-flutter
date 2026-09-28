@@ -11,7 +11,7 @@ class PrayerService extends ChangeNotifier {
   String _currentPrayer = "Dhuhr";
   String _nextPrayer = "Asr";
   String _timeUntilNext = "01:45:10";
-  HijriDate _hijriDate = HijriDate.fromGregorian(DateTime.now());
+  final HijriDate _hijriDate = HijriDate.fromGregorian(DateTime.now());
   Timer? _countdownTimer;
 
   PrayerTimesModel get times => _times;

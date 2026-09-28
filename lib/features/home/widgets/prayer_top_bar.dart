@@ -113,7 +113,7 @@ class PrayerTopBar extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
@@ -125,7 +125,7 @@ class PrayerTopBar extends StatelessWidget {
                                           color: AppColors.islamicGoldLight,
                                         ),
                                       ),
-                                      const SizedBox(width: 4),
+                                      SizedBox(width: 4),
                                       Icon(
                                         Icons.calendar_month_rounded,
                                         size: 10,

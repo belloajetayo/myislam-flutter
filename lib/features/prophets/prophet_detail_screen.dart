@@ -119,31 +119,24 @@ class _ProphetDetailScreenState extends State<ProphetDetailScreen> {
           children: [
             // 3D Tilt Hero Calligraphy Banner
             Holographic3dCard(
-              padding: const EdgeInsets.all(22),
-              borderRadius: 24,
+              borderRadius: BorderRadius.circular(24),
               border: Border.all(color: AppColors.islamicGold.withOpacity(0.55), width: 1.5),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.islamicPurpleDeep.withOpacity(0.28),
-                  blurRadius: 24,
-                  offset: const Offset(0, 10),
+              baseColor: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.all(22),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(24)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFF1E1B4B), // Deep Indigo
+                      Color(0xFF2E1065), // Cosmic Purple
+                      Color(0xFF0F172A), // Midnight
+                    ],
+                  ),
                 ),
-                BoxShadow(
-                  color: AppColors.astraSky.withOpacity(0.18),
-                  blurRadius: 18,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF1E1B4B), // Deep Indigo
-                  Color(0xFF2E1065), // Cosmic Purple
-                  Color(0xFF0F172A), // Midnight
-                ],
-              ),
-              child: Column(
+                child: Column(
                 children: [
                   // Order badge & Era
                   Row(
@@ -230,7 +223,7 @@ class _ProphetDetailScreenState extends State<ProphetDetailScreen> {
                   Text(
                     prophet.title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: AppColors.astraSkyLight,
@@ -259,7 +252,8 @@ class _ProphetDetailScreenState extends State<ProphetDetailScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+          ),
+          const SizedBox(height: 20),
 
             // Metadata Statistics Row
             Row(

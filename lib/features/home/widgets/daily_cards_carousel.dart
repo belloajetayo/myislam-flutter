@@ -19,8 +19,8 @@ class _DailyCardsCarouselState extends State<DailyCardsCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    final hadiths = LocalHadithsData.dailyHadiths;
-    final verses = LocalHadithsData.dailyVerses;
+    const hadiths = LocalHadithsData.dailyHadiths;
+    const verses = LocalHadithsData.dailyVerses;
 
     final currentData = _isHadithTab ? hadiths[_hadithIndex] : verses[_verseIndex];
     final total = _isHadithTab ? hadiths.length : verses.length;

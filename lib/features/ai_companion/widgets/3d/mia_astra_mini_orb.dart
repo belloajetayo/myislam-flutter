@@ -85,10 +85,10 @@ class _MiniOrbPainter extends CustomPainter {
     _drawRing(canvas, center, coreRadius * 1.45, isBackground: true);
 
     // 3. Volumetric Core (Sky Blue to Shining Gold to Royal Purple)
-    final coreGradient = RadialGradient(
-      center: const Alignment(-0.35, -0.35),
+    const coreGradient = RadialGradient(
+      center: Alignment(-0.35, -0.35),
       radius: 1.05,
-      colors: const [
+      colors: [
         Color(0xFFFFFBEB), // Specular highlight
         Color(0xFF7DD3FC), // Friendly Sky Blue
         Color(0xFF0EA5E9), // Sky Blue
@@ -96,7 +96,7 @@ class _MiniOrbPainter extends CustomPainter {
         Color(0xFF8B5CF6), // Royal Purple
         Color(0xFF4C1D95), // Deep Cosmic Purple
       ],
-      stops: const [0.0, 0.25, 0.50, 0.72, 0.88, 1.0],
+      stops: [0.0, 0.25, 0.50, 0.72, 0.88, 1.0],
     );
 
     // Drop shadow
@@ -138,7 +138,11 @@ class _MiniOrbPainter extends CustomPainter {
     for (int i = 0; i < 4; i++) {
       final a = starAngle + (i * math.pi / 2);
       final p = Offset(center.dx + starRadius * math.cos(a), center.dy + starRadius * math.sin(a));
-      if (i == 0) path.moveTo(p.dx, p.dy); else path.lineTo(p.dx, p.dy);
+      if (i == 0) {
+        path.moveTo(p.dx, p.dy);
+      } else {
+        path.lineTo(p.dx, p.dy);
+      }
     }
     path.close();
     canvas.drawPath(path, starPaint);
@@ -149,7 +153,7 @@ class _MiniOrbPainter extends CustomPainter {
 
   void _drawRing(Canvas canvas, Offset center, double ringRadius, {required bool isBackground}) {
     const segments = 36;
-    final step = 2 * math.pi / segments;
+    const step = 2 * math.pi / segments;
     final rot = progress * 2 * math.pi;
 
     for (int i = 0; i < segments; i++) {

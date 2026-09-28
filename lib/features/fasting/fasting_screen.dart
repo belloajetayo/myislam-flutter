@@ -104,29 +104,29 @@ class FastingScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(22),
               border: Border.all(color: isDark ? Colors.white10 : const Color(0xFFEEF2FF)),
             ),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Row(
+                Row(
                   children: [
                     Text("🤲", style: TextStyle(fontSize: 20)),
                     SizedBox(width: 8),
                     Text("Dua for Breaking Fast (Iftar)", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                   ],
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                SizedBox(height: 10),
+                Text(
                   "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ",
                   textAlign: TextAlign.right,
                   style: TextStyle(fontFamily: 'Amiri', fontSize: 19, fontWeight: FontWeight.bold, height: 1.8),
                 ),
-                const SizedBox(height: 6),
-                const Text(
+                SizedBox(height: 6),
+                Text(
                   "Dhahaba adh-dhama'u wabtallatil-'urooqu wa thabatal-ajru in sha' Allah",
                   style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: Color(0xFF8B5CF6)),
                 ),
-                const SizedBox(height: 4),
-                const Text(
+                SizedBox(height: 4),
+                Text(
                   "\"The thirst has gone, the veins are moistened, and the reward is confirmed, if Allah wills.\"",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),

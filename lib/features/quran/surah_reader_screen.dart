@@ -28,8 +28,8 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
   QuranViewMode _viewMode = QuranViewMode.mushaf; // Defaults to authentic Real Quran Mushaf!
   MushafThemeMode _themeMode = MushafThemeMode.madani;
   double _fontSize = 24.0;
-  bool _showTranslation = true;
-  bool _showTransliteration = true;
+  final bool _showTranslation = true;
+  final bool _showTransliteration = true;
   Ayah? _currentlyPlayingAyah;
 
   @override

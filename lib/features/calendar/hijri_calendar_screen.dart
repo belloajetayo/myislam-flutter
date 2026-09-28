@@ -343,8 +343,8 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> with SingleTi
         const SizedBox(height: 14),
 
         // Weekday Headers
-        Row(
-          children: const [
+        const Row(
+          children: [
             Expanded(child: _WeekdayHeader("Sun")),
             Expanded(child: _WeekdayHeader("Mon")),
             Expanded(child: _WeekdayHeader("Tue")),
@@ -949,11 +949,11 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> with SingleTi
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              const Row(
                 children: [
-                  const Text("📜", style: TextStyle(fontSize: 20)),
-                  const SizedBox(width: 10),
-                  const Text(
+                  Text("📜", style: TextStyle(fontSize: 20)),
+                  SizedBox(width: 10),
+                  Text(
                     "The Four Sacred Months",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),

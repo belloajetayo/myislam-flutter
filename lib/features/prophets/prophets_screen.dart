@@ -51,7 +51,7 @@ class _ProphetsScreenState extends State<ProphetsScreen> {
   }
 
   void _openDetail(ProphetItem prophet) {
-    final all = LocalProphetsData.allProphets;
+    const all = LocalProphetsData.allProphets;
     final index = all.indexWhere((p) => p.id == prophet.id);
     final prev = index > 0 ? all[index - 1] : null;
     final next = index < all.length - 1 ? all[index + 1] : null;
@@ -245,10 +245,10 @@ class _ProphetsScreenState extends State<ProphetsScreen> {
                       color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                     ),
                   ),
-                  Row(
+                  const Row(
                     children: [
-                      const Icon(Icons.menu_book_rounded, size: 13, color: AppColors.astraSky),
-                      const SizedBox(width: 4),
+                      Icon(Icons.menu_book_rounded, size: 13, color: AppColors.astraSky),
+                      SizedBox(width: 4),
                       Text(
                         "Quranic Duas Included",
                         style: TextStyle(
@@ -307,42 +307,40 @@ class _ProphetsScreenState extends State<ProphetsScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       child: Holographic3dCard(
-        maxRotation: 0.10,
-        borderRadius: 20,
+        maxTilt: 0.10,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
           width: 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.35) : AppColors.islamicPurple.withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+        baseColor: isDark ? AppColors.darkCardBg : Colors.white,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: isDark
+                ? const LinearGradient(
+                    colors: [
+                      AppColors.darkCardBg,
+                      Color(0xFF1F1A3A),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : const LinearGradient(
+                    colors: [
+                      Colors.white,
+                      Color(0xFFFAFAFE),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
           ),
-        ],
-        gradient: isDark
-            ? LinearGradient(
-                colors: [
-                  AppColors.darkCardBg,
-                  const Color(0xFF1F1A3A),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-            : const LinearGradient(
-                colors: [
-                  Colors.white,
-                  Color(0xFFFAFAFE),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: () => _openDetail(prophet),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () => _openDetail(prophet),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Top Row: Number, Name, Arabic Calligraphy
@@ -494,6 +492,7 @@ class _ProphetsScreenState extends State<ProphetsScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

@@ -301,7 +301,7 @@ class _Astra3dOrbPainter extends CustomPainter {
         (lightOffset.dy - center.dy) / radius,
       ),
       radius: 1.15,
-      colors: [
+      colors: const [
         AppColors.astraGoldShine, // 0.0 Specular Gold Hotspot
         AppColors.astraSkyLight, // 0.22 Friendly Sky Blue
         AppColors.astraSky, // 0.45 Radiant Sky Blue
@@ -437,7 +437,7 @@ class _Astra3dOrbPainter extends CustomPainter {
 
   void _paintSingle3dRing(Canvas canvas, Offset center, _RingSpec ring, bool isBackground) {
     const segments = 72;
-    final step = 2 * math.pi / segments;
+    const step = 2 * math.pi / segments;
     final currentRotation = rotationProgress * 2 * math.pi * ring.speed;
 
     for (int i = 0; i < segments; i++) {

@@ -6,8 +6,8 @@ class GeoUtils {
 
   /// Calculates the Qibla bearing in degrees (0..360) from true North
   static double calculateQiblaBearing(double lat, double lng) {
-    final phiK = kaabaLat * math.pi / 180.0;
-    final lambdaK = kaabaLng * math.pi / 180.0;
+    const phiK = kaabaLat * math.pi / 180.0;
+    const lambdaK = kaabaLng * math.pi / 180.0;
     final phi = lat * math.pi / 180.0;
     final lambda = lng * math.pi / 180.0;
 

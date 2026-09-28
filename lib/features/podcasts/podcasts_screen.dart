@@ -572,7 +572,7 @@ class _PodcastsScreenState extends State<PodcastsScreen> with SingleTickerProvid
                         color: isDark ? Colors.white54 : Colors.grey[600],
                       ),
                     ),
-                    Row(
+                    const Row(
                       children: [
                         Text(
                           "Explore Episodes",
@@ -582,8 +582,8 @@ class _PodcastsScreenState extends State<PodcastsScreen> with SingleTickerProvid
                             color: AppColors.islamicGold,
                           ),
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.arrow_forward_ios_rounded, size: 11, color: AppColors.islamicGold),
+                        SizedBox(width: 4),
+                        Icon(Icons.arrow_forward_ios_rounded, size: 11, color: AppColors.islamicGold),
                       ],
                     ),
                   ],
@@ -634,7 +634,7 @@ class _PodcastsScreenState extends State<PodcastsScreen> with SingleTickerProvid
                         ),
                         Text(
                           show.speaker,
-                          style: TextStyle(fontSize: 13, color: AppColors.islamicGold, fontWeight: FontWeight.w600),
+                          style: const TextStyle(fontSize: 13, color: AppColors.islamicGold, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -798,7 +798,7 @@ class _PodcastsScreenState extends State<PodcastsScreen> with SingleTickerProvid
   }
 
   Widget _buildLiveRadioTab(bool isDark, AudioService audioService) {
-    final stations = LocalRadioData.globalStations;
+    const stations = LocalRadioData.globalStations;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),

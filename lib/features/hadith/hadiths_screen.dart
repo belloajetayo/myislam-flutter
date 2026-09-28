@@ -484,39 +484,37 @@ class _HadithsScreenState extends State<HadithsScreen> with SingleTickerProvider
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       child: Holographic3dCard(
-        maxRotation: 0.08,
-        borderRadius: 20,
+        maxTilt: 0.08,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
           width: 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.35) : AppColors.islamicPurple.withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+        baseColor: isDark ? AppColors.darkCardBg : Colors.white,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: isDark
+                ? const LinearGradient(
+                    colors: [
+                      AppColors.darkCardBg,
+                      Color(0xFF1F1A3A),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : const LinearGradient(
+                    colors: [
+                      Colors.white,
+                      Color(0xFFFAFAFE),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
           ),
-        ],
-        gradient: isDark
-            ? LinearGradient(
-                colors: [
-                  AppColors.darkCardBg,
-                  const Color(0xFF1F1A3A),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-            : const LinearGradient(
-                colors: [
-                  Colors.white,
-                  Color(0xFFFAFAFE),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Card Top Header: Number, Title, Grade badge & Actions
@@ -768,8 +766,9 @@ class _HadithsScreenState extends State<HadithsScreen> with SingleTickerProvider
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildEmptyState(String message, bool isDark) {
     return Center(

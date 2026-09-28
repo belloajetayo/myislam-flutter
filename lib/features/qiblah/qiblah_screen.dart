@@ -17,7 +17,7 @@ class _QiblahScreenState extends State<QiblahScreen> with SingleTickerProviderSt
   // Lagos reference coordinates (can be updated with GPS)
   final double _userLat = 6.5244;
   final double _userLng = 3.3792;
-  double _deviceHeading = 45.0; // Current heading in degrees
+  final double _deviceHeading = 45.0; // Current heading in degrees
   late double _qiblaBearing;
   late double _distanceToKaabaKm;
 
