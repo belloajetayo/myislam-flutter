@@ -118,10 +118,10 @@ class _CommunityFeedCardState extends State<CommunityFeedCard> {
           children: [
             Row(
               children: [
-                const Icon(Icons.people_alt_rounded, color: AppColors.islamicIndigo, size: 20),
+                const Icon(Icons.menu_book_rounded, color: AppColors.islamicIndigo, size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  "Community Reflections",
+                  "Daily Wisdom",
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,

@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/sources/local_hadiths_data.dart';
-import '../../ai_companion/widgets/3d/holographic_3d_card.dart';
 
 class DailyCardsCarousel extends StatefulWidget {
   const DailyCardsCarousel({super.key});
@@ -17,6 +16,14 @@ class _DailyCardsCarouselState extends State<DailyCardsCarousel> {
   int _hadithIndex = 0;
   int _verseIndex = 0;
 
+  static const List<String> _bgImages = [
+    "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=800&q=80",
+    "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?w=800&q=80",
+    "https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=800&q=80",
+    "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=800&q=80",
+    "https://images.unsplash.com/photo-1597975020386-f8e85b6e8e0b?w=800&q=80",
+  ];
+
   @override
   Widget build(BuildContext context) {
     const hadiths = LocalHadithsData.dailyHadiths;
@@ -25,6 +32,7 @@ class _DailyCardsCarouselState extends State<DailyCardsCarousel> {
     final currentData = _isHadithTab ? hadiths[_hadithIndex] : verses[_verseIndex];
     final total = _isHadithTab ? hadiths.length : verses.length;
     final currentIndex = _isHadithTab ? _hadithIndex : _verseIndex;
+    final bgUrl = _bgImages[currentIndex % _bgImages.length];
 
     final today = DateTime.now();
     final dayNum = today.day.toString();
@@ -33,236 +41,430 @@ class _DailyCardsCarouselState extends State<DailyCardsCarousel> {
       "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
     ][today.month - 1];
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Tab switcher
+        // Section Header with Share & Download
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.auto_awesome_rounded, color: Color(0xFFF59E0B), size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Daily Inspiration",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.share_outlined, size: 18, color: Color(0xFFF59E0B)),
+                    onPressed: () {
+                      final shareText = "${currentData['text']}\n— ${currentData['source']}\n(via MyIslam App)";
+                      Share.share(shareText);
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.download_rounded, size: 18, color: Color(0xFFF59E0B)),
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Inspiration saved to bookmarks! ✅")),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        // Segmented Tabs: Hadith | Verse
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildTabButton("Hadith", _isHadithTab, () {
-              setState(() => _isHadithTab = true);
-            }),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _isHadithTab = true),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: _isHadithTab ? const Color(0xFFF59E0B) : (isDark ? Colors.white10 : Colors.white),
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: _isHadithTab
+                        ? [
+                            BoxShadow(
+                              color: const Color(0xFFF59E0B).withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : null,
+                    border: Border.all(
+                      color: _isHadithTab
+                          ? Colors.transparent
+                          : (isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.auto_awesome_rounded,
+                        size: 14,
+                        color: _isHadithTab ? Colors.white : Colors.grey,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        "Hadith",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: _isHadithTab ? Colors.white : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(width: 8),
-            _buildTabButton("Verse", !_isHadithTab, () {
-              setState(() => _isHadithTab = false);
-            }),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _isHadithTab = false),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: !_isHadithTab ? const Color(0xFF6366F1) : (isDark ? Colors.white10 : Colors.white),
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: !_isHadithTab
+                        ? [
+                            BoxShadow(
+                              color: const Color(0xFF6366F1).withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : null,
+                    border: Border.all(
+                      color: !_isHadithTab
+                          ? Colors.transparent
+                          : (isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.menu_book_rounded,
+                        size: 14,
+                        color: !_isHadithTab ? Colors.white : Colors.grey,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        "Verse",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: !_isHadithTab ? Colors.white : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
 
-        // Main 3D Holographic Card
-        Holographic3dCard(
-          borderRadius: BorderRadius.circular(28),
-          baseColor: Colors.transparent,
-          border: Border.all(color: Colors.transparent),
+        // Main Inspiration Card with photo background
+        ClipRRect(
+          borderRadius: BorderRadius.circular(24),
           child: Container(
             width: double.infinity,
+            height: 310,
             decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF1E1B4B), Color(0xFF0F172A), Color(0xFF172554)],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF1E1B4B).withOpacity(0.35),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: isDark ? Colors.white10 : const Color(0xFFE2E8F0),
               ),
-            ],
-            border: Border.all(color: AppColors.islamicGold.withOpacity(0.35), width: 1.2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                // Top row: Date badge + title
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              Text(
-                                dayNum,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color(0xFF1E1B4B),
-                                  height: 1,
-                                ),
-                              ),
-                              Text(
-                                monthName,
-                                style: const TextStyle(
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFD97706),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          _isHadithTab ? "✨ Hadith Of The Day" : "📖 Verse Of The Day",
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFFBBF24),
-                          ),
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.share_rounded, color: Colors.white70, size: 20),
-                      onPressed: () {
-                        final shareText = "${currentData['text']}\n— ${currentData['source']}\n(via MyIslam)";
-                        Share.share(shareText);
-                      },
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                // Optional Arabic text for verse or narrator for hadith
-                if (!_isHadithTab && currentData.containsKey("arabic")) ...[
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      currentData["arabic"]!,
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                      style: GoogleFonts.amiriQuran(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        height: 1.8,
+                // Background Image
+                Image.network(
+                  bgUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFF1E1B4B), Color(0xFF0F172A), Color(0xFF172554)],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                ],
+                ),
 
-                if (_isHadithTab && currentData.containsKey("narrator")) ...[
-                  Text(
-                    "${currentData['narrator']}:",
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontSize: 12,
-                      color: Colors.white.withOpacity(0.7),
+                // Dark multi-stop gradient overlay
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.35),
+                        Colors.black.withOpacity(0.60),
+                        Colors.black.withOpacity(0.90),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                ],
-
-                // Quote
-                Text(
-                  "\"${currentData['text']}\"",
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    height: 1.5,
                   ),
                 ),
 
-                const SizedBox(height: 14),
+                // Top golden accent border line
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 4,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFF59E0B), Color(0xFFD97706)],
+                      ),
+                    ),
+                  ),
+                ),
 
-                // Footer source & Carousel arrows
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "— ${currentData['source']}",
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFFFCD34D),
+                // Top Content: Date Badge + Title
+                Positioned(
+                  top: 14,
+                  left: 14,
+                  right: 14,
+                  child: Row(
+                    children: [
+                      // Date Badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        maxLines: 1,
+                        child: Column(
+                          children: [
+                            Text(
+                              dayNum,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xFF0F172A),
+                                height: 1,
+                              ),
+                            ),
+                            Text(
+                              monthName,
+                              style: const TextStyle(
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFD97706),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        _isHadithTab ? "✨ Hadith Of The Day" : "✨ Quranic Verse",
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFBBF24),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Bottom Content: Quote + Source + MyIslam branding
+                Positioned(
+                  bottom: 14,
+                  left: 14,
+                  right: 14,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_isHadithTab && currentData.containsKey("narrator"))
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            "${currentData['narrator']}:",
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontSize: 11,
+                              color: Colors.white.withOpacity(0.75),
+                            ),
+                          ),
+                        ),
+
+                      if (!_isHadithTab && currentData.containsKey("arabic"))
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 6),
+                          child: Text(
+                            currentData["arabic"]!,
+                            textAlign: TextAlign.right,
+                            textDirection: TextDirection.rtl,
+                            style: GoogleFonts.amiriQuran(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              height: 1.6,
+                            ),
+                          ),
+                        ),
+
+                      Text(
+                        "\"${currentData['text']}\"",
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          height: 1.45,
+                        ),
+                        maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 6),
+
+                      Text(
+                        "[${currentData['source']}]",
+                        style: const TextStyle(
+                          fontSize: 10.5,
+                          fontStyle: FontStyle.italic,
+                          color: Color(0xFFFCD34D),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Brand Footer
+                      Row(
+                        children: [
+                          Container(
+                            width: 14,
+                            height: 14,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF10B981),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Center(
+                              child: Text("م", style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            "MyIslam.App",
+                            style: TextStyle(
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white.withOpacity(0.6),
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Left Arrow Button
+                Positioned(
+                  left: 8,
+                  top: 130,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (_isHadithTab) {
+                          _hadithIndex = (_hadithIndex - 1 + hadiths.length) % hadiths.length;
+                        } else {
+                          _verseIndex = (_verseIndex - 1 + verses.length) % verses.length;
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.4),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white24),
+                      ),
+                      child: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 20),
                     ),
-                    Row(
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          icon: const Icon(Icons.chevron_left_rounded, color: Colors.white70, size: 22),
-                          onPressed: () {
-                            setState(() {
-                              if (_isHadithTab) {
-                                _hadithIndex = (_hadithIndex - 1 + hadiths.length) % hadiths.length;
-                              } else {
-                                _verseIndex = (_verseIndex - 1 + verses.length) % verses.length;
-                              }
-                            });
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          "${currentIndex + 1}/$total",
-                          style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.6)),
-                        ),
-                        const SizedBox(width: 8),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          icon: const Icon(Icons.chevron_right_rounded, color: Colors.white70, size: 22),
-                          onPressed: () {
-                            setState(() {
-                              if (_isHadithTab) {
-                                _hadithIndex = (_hadithIndex + 1) % hadiths.length;
-                              } else {
-                                _verseIndex = (_verseIndex + 1) % verses.length;
-                              }
-                            });
-                          },
-                        ),
-                      ],
+                  ),
+                ),
+
+                // Right Arrow Button
+                Positioned(
+                  right: 8,
+                  top: 130,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (_isHadithTab) {
+                          _hadithIndex = (_hadithIndex + 1) % hadiths.length;
+                        } else {
+                          _verseIndex = (_verseIndex + 1) % verses.length;
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.4),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white24),
+                      ),
+                      child: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 20),
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
           ),
         ),
-      ),
-      ],
-    );
-  }
+        const SizedBox(height: 10),
 
-  Widget _buildTabButton(String title, bool isSelected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.islamicGold : Colors.black12,
-          borderRadius: BorderRadius.circular(20),
+        // Pagination Dots Indicator
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(total.clamp(0, 10), (i) {
+            final active = i == (currentIndex % 10);
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 2.5),
+              width: active ? 18 : 6,
+              height: 6,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: active
+                    ? (_isHadithTab ? const Color(0xFFF59E0B) : const Color(0xFF6366F1))
+                    : (isDark ? Colors.white24 : const Color(0xFFCBD5E1)),
+              ),
+            );
+          }),
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            color: isSelected ? Colors.white : Colors.grey,
-          ),
-        ),
-      ),
+      ],
     );
   }
 }
