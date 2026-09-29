@@ -43,5 +43,19 @@ _flutter.buildConfig = {"engineRevision":"06a2e2a110089dff50fe635cffd2a61e1b24fb
 _flutter.loader.load({
   serviceWorkerSettings: {
     serviceWorkerVersion: "1593920709" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */
+  },
+  onEntrypointLoaded: async function(engineInitializer) {
+    const appRunner = await engineInitializer.initializeEngine();
+    const loading = document.getElementById('loading-container');
+    if (loading) {
+      loading.style.opacity = '0';
+      setTimeout(function() {
+        if (loading.parentNode) {
+          loading.parentNode.removeChild(loading);
+        }
+      }, 400);
+    }
+    await appRunner.runApp();
   }
 });
+

@@ -27,6 +27,13 @@ const MIME_TYPES = {
 const server = http.createServer((req, res) => {
   // Normalize URL to remove query strings or hash
   let reqPath = decodeURI(req.url.split('?')[0]);
+  // Strip /myislam-flutter prefix if present so that both root and subpath requests work
+  if (reqPath.startsWith('/myislam-flutter/')) {
+    reqPath = reqPath.slice('/myislam-flutter'.length);
+  } else if (reqPath === '/myislam-flutter') {
+    reqPath = '/';
+  }
+
   if (reqPath === '/') reqPath = '/index.html';
 
   let filePath = path.join(ROOT, reqPath);
@@ -40,8 +47,15 @@ const server = http.createServer((req, res) => {
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      // Fallback to index.html for client-side routing
-      filePath = path.join(ROOT, 'index.html');
+      const reqExt = path.extname(reqPath);
+      if (!reqExt || reqExt === '.html') {
+        // Fallback to index.html for client-side routing
+        filePath = path.join(ROOT, 'index.html');
+      } else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end(`Not found: ${reqPath}`);
+        return;
+      }
     }
 
     const ext = path.extname(filePath).toLowerCase();
