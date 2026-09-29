@@ -151,14 +151,12 @@ class HomeScreen extends StatelessWidget {
 
               // 6. Islamic Calendar Card (Hijri Month, calendar grid, today's prayers)
               IslamicCalendarCard(
-                onAskMIA: () => onNavigate("ai_companion"),
+                onTap: () => onNavigate("calendar"),
               ),
               const SizedBox(height: 20),
 
               // 7. Daily Wisdom (Community Reflections & Discussions)
-              CommunityFeedCard(
-                onWriteTap: () => onNavigate("ai_companion"),
-              ),
+              const CommunityFeedCard(),
             ],
           ),
         ),

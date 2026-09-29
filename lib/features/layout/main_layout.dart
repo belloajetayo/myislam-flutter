@@ -20,6 +20,7 @@ import '../prophets/prophets_screen.dart';
 import '../hadith/hadiths_screen.dart';
 import '../progress/progress_screen.dart';
 import '../ai_companion/myislam_ai_floating_button.dart';
+import '../ai_companion/myislam_ai_sheet.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -34,6 +35,10 @@ class _MainLayoutState extends State<MainLayout> {
   String? _activeSubRoute;
 
   void _handleNavigate(String routeName) {
+    if (routeName == "ai_companion" || routeName == "mia") {
+      MyIslamAiSheet.show(context, onNavigate: _handleNavigate);
+      return;
+    }
     setState(() {
       switch (routeName) {
         case "home":

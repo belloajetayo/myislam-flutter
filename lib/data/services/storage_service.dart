@@ -12,6 +12,8 @@ class StorageService extends ChangeNotifier {
   static const String _arabicFontSizeKey = "dua_arabic_font_size";
   static const String _showTransliterationKey = "dua_show_transliteration";
   static const String _showTranslationKey = "dua_show_translation";
+  static const String _userNameKey = "mia_user_name";
+  static const String _geminiApiKeyKey = "mia_gemini_api_key";
 
   bool _darkMode = false;
   List<String> _prayersCompleted = [];
@@ -22,6 +24,8 @@ class StorageService extends ChangeNotifier {
   double _arabicFontSize = 24.0;
   bool _showTransliteration = true;
   bool _showTranslation = true;
+  String? _userName;
+  String? _geminiApiKey;
 
   bool get darkMode => _darkMode;
   List<String> get prayersCompleted => _prayersCompleted;
@@ -32,6 +36,8 @@ class StorageService extends ChangeNotifier {
   double get arabicFontSize => _arabicFontSize;
   bool get showTransliteration => _showTransliteration;
   bool get showTranslation => _showTranslation;
+  String? get userName => _userName;
+  String? get geminiApiKey => _geminiApiKey;
 
   bool isFavoriteDua(String id) => _favoriteDuaIds.contains(id);
 
@@ -45,6 +51,8 @@ class StorageService extends ChangeNotifier {
     _arabicFontSize = prefs.getDouble(_arabicFontSizeKey) ?? 24.0;
     _showTransliteration = prefs.getBool(_showTransliterationKey) ?? true;
     _showTranslation = prefs.getBool(_showTranslationKey) ?? true;
+    _userName = prefs.getString(_userNameKey);
+    _geminiApiKey = prefs.getString(_geminiApiKeyKey);
 
     final todayStr = DateTime.now().toIso8601String().split('T')[0];
     final lastDate = prefs.getString(_lastPrayerDateKey);
@@ -124,5 +132,27 @@ class StorageService extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_quranPagesKey, _quranPagesRead);
+  }
+
+  Future<void> setUserName(String name) async {
+    _userName = name.trim().isEmpty ? null : name.trim();
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    if (_userName != null) {
+      await prefs.setString(_userNameKey, _userName!);
+    } else {
+      await prefs.remove(_userNameKey);
+    }
+  }
+
+  Future<void> setGeminiApiKey(String key) async {
+    _geminiApiKey = key.trim().isEmpty ? null : key.trim();
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    if (_geminiApiKey != null) {
+      await prefs.setString(_geminiApiKeyKey, _geminiApiKey!);
+    } else {
+      await prefs.remove(_geminiApiKeyKey);
+    }
   }
 }
