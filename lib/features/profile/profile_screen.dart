@@ -16,10 +16,102 @@ class ProfileScreen extends StatelessWidget {
     {"name": "Adhkar Devotee", "desc": "Recited 50+ morning and evening supplications", "icon": Icons.volunteer_activism_rounded, "earned": false},
   ];
 
+  void _editName(BuildContext context, StorageService storage) {
+    final controller = TextEditingController(text: storage.userName ?? "Bello Ajetayo");
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Edit Profile Name"),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            labelText: "Display Name",
+            hintText: "Enter your name",
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.islamicIndigo,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              storage.setUserName(controller.text);
+              Navigator.pop(ctx);
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _configureApiKey(BuildContext context, StorageService storage) {
+    final controller = TextEditingController(text: storage.geminiApiKey ?? "");
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Gemini API Key"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Add your Google Gemini API key for unlimited live AI companion reasoning.",
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: "API Key",
+                hintText: "AIzaSy...",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.islamicIndigo,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              storage.setGeminiApiKey(controller.text);
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Gemini API Key updated successfully! ✨"),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final storage = context.watch<StorageService>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final displayName = storage.userName ?? "Bello Ajetayo";
+    final initials = displayName.trim().isNotEmpty
+        ? displayName.trim().split(' ').map((e) => e.isNotEmpty ? e[0] : '').take(2).join().toUpperCase()
+        : "BA";
 
     return SafeArea(
       child: ListView(
@@ -31,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
               AnimatedBackButton(onPressed: onBack),
               const SizedBox(width: 14),
               const Text(
-                "Profile & Progress",
+                "Profile & Settings",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.islamicGold),
               ),
             ],
@@ -66,16 +158,33 @@ class ProfileScreen extends StatelessWidget {
                     border: Border.all(color: Colors.white, width: 2),
                   ),
                   alignment: Alignment.center,
-                  child: const Text("BA", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
+                  child: Text(
+                    initials,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Bello Ajetayo",
-                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              displayName,
+                              style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit_outlined, color: Colors.white70, size: 18),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            tooltip: "Edit Name",
+                            onPressed: () => _editName(context, storage),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -110,14 +219,16 @@ class ProfileScreen extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // Stats Overview
+          // Stats Overview (4 stat boxes)
           Row(
             children: [
-              _buildStatBox("Salat Today", "${storage.prayersCompleted.length}/5", AppColors.salatGradient, isDark),
+              _buildStatBox("Salat Today", "${storage.prayersCompleted.length}/5", isDark),
               const SizedBox(width: 8),
-              _buildStatBox("Quran Pages", "${storage.quranPagesRead} pg", AppColors.quranGradient, isDark),
+              _buildStatBox("Streak", "${storage.streak}d", isDark),
               const SizedBox(width: 8),
-              _buildStatBox("Duas Read", "${storage.duasRead}", AppColors.sawmGradient, isDark),
+              _buildStatBox("Quran Read", "${storage.quranPagesRead}p", isDark),
+              const SizedBox(width: 8),
+              _buildStatBox("Tasbih Dhikr", "${storage.totalTasbih}", isDark),
             ],
           ),
 
@@ -236,26 +347,40 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
           ),
+          const Divider(height: 16),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.auto_awesome_rounded, color: AppColors.islamicGold),
+            title: const Text("MIA AI Companion Intelligence", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            subtitle: Text(
+              storage.geminiApiKey != null && storage.geminiApiKey!.isNotEmpty
+                  ? "Custom Gemini API key configured ✨"
+                  : "Tap to set custom Gemini API key (optional)",
+              style: const TextStyle(fontSize: 11, color: Colors.grey),
+            ),
+            trailing: const Icon(Icons.chevron_right_rounded, color: Colors.grey),
+            onTap: () => _configureApiKey(context, storage),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatBox(String label, String value, LinearGradient gradient, bool isDark) {
+  Widget _buildStatBox(String label, String value, bool isDark) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         decoration: BoxDecoration(
           color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(color: isDark ? Colors.white10 : const Color(0xFFEEF2FF)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+            Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900)),
             const SizedBox(height: 4),
-            Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+            Text(label, style: const TextStyle(fontSize: 10, color: Colors.grey), maxLines: 1, overflow: TextOverflow.ellipsis),
           ],
         ),
       ),

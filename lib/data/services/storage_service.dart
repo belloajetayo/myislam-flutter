@@ -14,12 +14,14 @@ class StorageService extends ChangeNotifier {
   static const String _showTranslationKey = "dua_show_translation";
   static const String _userNameKey = "mia_user_name";
   static const String _geminiApiKeyKey = "mia_gemini_api_key";
+  static const String _totalTasbihKey = "tasbih_lifetime_total";
 
   bool _darkMode = false;
   List<String> _prayersCompleted = [];
   int _streak = 7;
   int _quranPagesRead = 4;
   int _duasRead = 12;
+  int _totalTasbih = 132;
   List<String> _favoriteDuaIds = [];
   double _arabicFontSize = 24.0;
   bool _showTransliteration = true;
@@ -32,6 +34,7 @@ class StorageService extends ChangeNotifier {
   int get streak => _streak;
   int get quranPagesRead => _quranPagesRead;
   int get duasRead => _duasRead;
+  int get totalTasbih => _totalTasbih;
   List<String> get favoriteDuaIds => _favoriteDuaIds;
   double get arabicFontSize => _arabicFontSize;
   bool get showTransliteration => _showTransliteration;
@@ -47,6 +50,7 @@ class StorageService extends ChangeNotifier {
     _streak = prefs.getInt(_streakKey) ?? 7;
     _quranPagesRead = prefs.getInt(_quranPagesKey) ?? 4;
     _duasRead = prefs.getInt(_duasReadCountKey) ?? 12;
+    _totalTasbih = prefs.getInt(_totalTasbihKey) ?? 132;
     _favoriteDuaIds = prefs.getStringList(_favoriteDuasKey) ?? [];
     _arabicFontSize = prefs.getDouble(_arabicFontSizeKey) ?? 24.0;
     _showTransliteration = prefs.getBool(_showTransliterationKey) ?? true;
@@ -89,6 +93,13 @@ class StorageService extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_duasReadCountKey, _duasRead);
+  }
+
+  Future<void> incrementTasbih() async {
+    _totalTasbih++;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_totalTasbihKey, _totalTasbih);
   }
 
   Future<void> toggleFavoriteDua(String id) async {

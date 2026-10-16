@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <base href="/myislam-flutter/">
   <script>
     (function () {
-      var baseHref = window.location.pathname.startsWith('/myislam-flutter') ? '/myislam-flutter/' : '/';
-      document.write('<base href="' + baseHref + '">');
+      if (!window.location.pathname.startsWith('/myislam-flutter')) {
+        var base = document.querySelector('base');
+        if (base) {
+          base.href = '/';
+        }
+      }
     })();
   </script>
 
@@ -91,6 +96,29 @@
     <div class="loading-spinner"></div>
   </div>
 
+  <script>
+    function hideLoading() {
+      var loading = document.getElementById('loading-container');
+      if (loading) {
+        loading.style.opacity = '0';
+        setTimeout(function () {
+          if (loading && loading.parentNode) {
+            loading.parentNode.removeChild(loading);
+          }
+        }, 400);
+      }
+    }
+    window.addEventListener('flutter-first-frame', hideLoading);
+    window.addEventListener('flutter-initialized', hideLoading);
+    var observer = new MutationObserver(function (mutations, obs) {
+      if (document.querySelector('flt-glass-pane') || document.querySelector('flutter-view')) {
+        setTimeout(hideLoading, 400);
+        obs.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(hideLoading, 8000);
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

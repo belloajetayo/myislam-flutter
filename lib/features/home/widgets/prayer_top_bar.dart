@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/services/prayer_service.dart';
+import '../../../data/services/storage_service.dart';
 import '../../../data/services/audio_service.dart';
 
 class PrayerTopBar extends StatelessWidget {
@@ -43,6 +44,7 @@ class PrayerTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prayerService = context.watch<PrayerService>();
+    final storage = context.watch<StorageService>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final times = prayerService.times.toMap();
     final current = prayerService.currentPrayer;
@@ -297,50 +299,93 @@ class PrayerTopBar extends StatelessWidget {
                       final time = times[name] ?? "--:--";
                       final isCurrent = current.toLowerCase() == name.toLowerCase();
 
+                      final isPrayed = storage.prayersCompleted.contains(name);
+                      final isPrayer = name != "Sunrise";
+
                       return Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 2),
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
-                          decoration: BoxDecoration(
-                            color: isCurrent
-                                ? Colors.white.withOpacity(isDark ? 0.35 : 0.28)
-                                : Colors.white.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(14),
-                            border: isCurrent
-                                ? Border.all(color: Colors.white.withOpacity(0.85), width: 1.5)
-                                : null,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                name,
-                                style: TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: isCurrent ? FontWeight.bold : FontWeight.w600,
-                                  color: isCurrent ? Colors.white : Colors.white70,
-                                ),
+                        child: GestureDetector(
+                          onTap: isPrayer
+                              ? () {
+                                  storage.togglePrayer(name);
+                                  if (!isPrayed && storage.prayersCompleted.length == 4) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Allhamdulillah! All 5 daily prayers completed! 🤲🌟"),
+                                        backgroundColor: Color(0xFF059669),
+                                        duration: Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
+                                }
+                              : null,
+                          behavior: HitTestBehavior.opaque,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
+                            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 2),
+                            decoration: BoxDecoration(
+                              color: isPrayed
+                                  ? const Color(0xFF10B981).withOpacity(0.3)
+                                  : (isCurrent
+                                      ? Colors.white.withOpacity(isDark ? 0.35 : 0.28)
+                                      : Colors.white.withOpacity(0.12)),
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: isPrayed
+                                    ? const Color(0xFF34D399).withOpacity(0.9)
+                                    : (isCurrent
+                                        ? Colors.white.withOpacity(0.85)
+                                        : Colors.white.withOpacity(0.08)),
+                                width: isPrayed || isCurrent ? 1.5 : 0.8,
                               ),
-                              const SizedBox(height: 3),
-                              Text(
-                                time,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    if (isPrayed) ...[
+                                      const Icon(
+                                        Icons.check_circle_rounded,
+                                        size: 10,
+                                        color: Color(0xFF34D399),
+                                      ),
+                                      const SizedBox(width: 2),
+                                    ],
+                                    Text(
+                                      name,
+                                      style: TextStyle(
+                                        fontSize: 9,
+                                        fontWeight: isCurrent || isPrayed ? FontWeight.bold : FontWeight.w600,
+                                        color: isPrayed
+                                            ? const Color(0xFF6EE7B7)
+                                            : (isCurrent ? Colors.white : Colors.white70),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              if (isCurrent)
-                                Container(
-                                  margin: const EdgeInsets.only(top: 3),
-                                  width: 4,
-                                  height: 4,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.goldWarm,
-                                    shape: BoxShape.circle,
+                                const SizedBox(height: 3),
+                                Text(
+                                  time,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: isPrayed ? const Color(0xFFE6FFFA) : Colors.white,
                                   ),
                                 ),
-                            ],
+                                if (isCurrent && !isPrayed)
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 3),
+                                    width: 4,
+                                    height: 4,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.goldWarm,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       );

@@ -51,10 +51,14 @@ class _MyIslamAiSheetState extends State<MyIslamAiSheet> with SingleTickerProvid
   ];
 
   static const List<String> _suggestedQuestions = [
-    "What should I do right now?",
-    "How's my streak — what's my next step?",
-    "What's special about today?",
-    "Suggest an adhkar for now",
+    "🤲 Dua for relief from anxiety & distress",
+    "🕌 How to pray Tahajjud & Night Vigil",
+    "💰 How do I calculate my Zakat accurately?",
+    "🌙 What are the Sunnah fasting days and rules?",
+    "📖 Explain the virtues & tafsir of Ayat al-Kursi",
+    "🕋 Step-by-step interactive guide to Umrah",
+    "🔥 How's my streak — what's my next step?",
+    "🕊️ Suggest a soothing evening adhkar for peace",
   ];
 
   bool _showAppGuide = false;

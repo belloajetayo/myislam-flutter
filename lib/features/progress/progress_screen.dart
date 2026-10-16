@@ -33,6 +33,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
     final prayerPercent = (prayersCount / 5.0).clamp(0.0, 1.0);
     final quranPercent = (storage.quranPagesRead / 20.0).clamp(0.0, 1.0);
     final streakPercent = (storage.streak / 30.0).clamp(0.0, 1.0);
+    final tasbihPercent = (storage.totalTasbih / 100.0).clamp(0.0, 1.0);
 
     final now = DateTime.now();
     final months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -82,7 +83,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
             const SizedBox(height: 20),
 
-            // Top 3 Stat Cards (from Progress.tsx)
+            // Top 4 Stat Cards: Prayers, Streak, Quran, Tasbih
             Row(
               children: [
                 _buildStatCard(
@@ -93,7 +94,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   progress: prayerPercent,
                   isDark: isDark,
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 _buildStatCard(
                   label: "Streak",
                   value: "${storage.streak}d",
@@ -102,13 +103,22 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   progress: streakPercent,
                   isDark: isDark,
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 _buildStatCard(
                   label: "Quran",
-                  value: "${storage.quranPagesRead}pg",
+                  value: "${storage.quranPagesRead}p",
                   icon: Icons.menu_book_rounded,
                   colors: const [Color(0xFF10B981), Color(0xFF0D9488)],
                   progress: quranPercent,
+                  isDark: isDark,
+                ),
+                const SizedBox(width: 8),
+                _buildStatCard(
+                  label: "Tasbih",
+                  value: "${storage.totalTasbih}",
+                  icon: Icons.fingerprint_rounded,
+                  colors: const [Color(0xFFF59E0B), Color(0xFFD97706)],
+                  progress: tasbihPercent,
                   isDark: isDark,
                 ),
               ],

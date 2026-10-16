@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
 import '../../data/services/storage_service.dart';
 import 'widgets/prayer_top_bar.dart';
 import 'widgets/quick_shortcuts.dart';

@@ -14,12 +14,28 @@ class QiblahScreen extends StatefulWidget {
 }
 
 class _QiblahScreenState extends State<QiblahScreen> with SingleTickerProviderStateMixin {
-  final double _userLat = 6.5244;
-  final double _userLng = 3.3792;
-  final double _deviceHeading = 45.0; // Simulated heading
+  double _userLat = 6.5244;
+  double _userLng = 3.3792;
+  String _cityName = "Lagos, Nigeria";
+  double _deviceHeading = 45.0; // Interactive simulated heading
   late double _qiblaBearing;
   late double _distanceToKaabaKm;
   bool _calibrating = false;
+
+  static const List<Map<String, dynamic>> _cities = [
+    {"name": "Lagos, Nigeria", "lat": 6.5244, "lng": 3.3792},
+    {"name": "Makkah, Saudi Arabia", "lat": 21.4225, "lng": 39.8262},
+    {"name": "Madinah, Saudi Arabia", "lat": 24.5247, "lng": 39.5692},
+    {"name": "Cairo, Egypt", "lat": 30.0444, "lng": 31.2357},
+    {"name": "Istanbul, Turkey", "lat": 41.0082, "lng": 28.9784},
+    {"name": "London, UK", "lat": 51.5074, "lng": -0.1278},
+    {"name": "New York, USA", "lat": 40.7128, "lng": -74.0060},
+    {"name": "Dubai, UAE", "lat": 25.2048, "lng": 55.2708},
+    {"name": "Kuala Lumpur, Malaysia", "lat": 3.1390, "lng": 101.6869},
+    {"name": "Jakarta, Indonesia", "lat": -6.2088, "lng": 106.8456},
+    {"name": "Toronto, Canada", "lat": 43.6532, "lng": -79.3832},
+    {"name": "Paris, France", "lat": 48.8566, "lng": 2.3522},
+  ];
 
   static const List<Map<String, dynamic>> _mockMosques = [
     {
@@ -53,6 +69,129 @@ class _QiblahScreenState extends State<QiblahScreen> with SingleTickerProviderSt
     super.initState();
     _qiblaBearing = GeoUtils.calculateQiblaBearing(_userLat, _userLng);
     _distanceToKaabaKm = GeoUtils.calculateDistanceKm(_userLat, _userLng, GeoUtils.kaabaLat, GeoUtils.kaabaLng);
+  }
+
+  void _showCityPicker() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        final isDark = Theme.of(ctx).brightness == Brightness.dark;
+        return Container(
+          height: MediaQuery.of(ctx).size.height * 0.62,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkCardBg : Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(28),
+              topRight: Radius.circular(28),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Row(
+                children: [
+                  Icon(Icons.location_city_rounded, color: AppColors.islamicGold, size: 22),
+                  SizedBox(width: 8),
+                  Text(
+                    "Select Qiblah Location",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                "Calculates exact Kaaba bearing and spherical distance",
+                style: TextStyle(fontSize: 11.5, color: Colors.grey),
+              ),
+              const SizedBox(height: 14),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: _cities.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, idx) {
+                    final c = _cities[idx];
+                    final isSel = c["name"] == _cityName;
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          _cityName = c["name"] as String;
+                          _userLat = c["lat"] as double;
+                          _userLng = c["lng"] as double;
+                          _qiblaBearing = GeoUtils.calculateQiblaBearing(_userLat, _userLng);
+                          _distanceToKaabaKm = GeoUtils.calculateDistanceKm(_userLat, _userLng, GeoUtils.kaabaLat, GeoUtils.kaabaLng);
+                        });
+                        Navigator.pop(ctx);
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: isSel
+                              ? AppColors.islamicGold.withOpacity(0.14)
+                              : (isDark ? Colors.white.withOpacity(0.04) : const Color(0xFFF8FAFC)),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isSel ? AppColors.islamicGold : (isDark ? AppColors.darkBorder : const Color(0xFFE2E8F0)),
+                            width: isSel ? 1.5 : 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.location_on_rounded, size: 18, color: isSel ? AppColors.islamicGold : Colors.grey),
+                                const SizedBox(width: 10),
+                                Text(
+                                  c["name"] as String,
+                                  style: TextStyle(
+                                    fontWeight: isSel ? FontWeight.bold : FontWeight.w600,
+                                    fontSize: 13,
+                                    color: isSel ? AppColors.islamicGold : null,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (isSel)
+                              const Icon(Icons.check_circle_rounded, size: 18, color: AppColors.islamicGold),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _autoAlign() {
+    setState(() {
+      _deviceHeading = _qiblaBearing;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Aligned directly with the Holy Kaaba! 🕋"),
+        backgroundColor: Color(0xFF059669),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   void _showGuidanceDialog() {
@@ -292,15 +431,24 @@ class _QiblahScreenState extends State<QiblahScreen> with SingleTickerProviderSt
                         ),
                       ],
                     ),
-                    const Row(
-                      children: [
-                        Icon(Icons.location_on_rounded, size: 12, color: AppColors.primaryGold),
-                        SizedBox(width: 3),
-                        Text(
-                          "Accurate GPS Location",
-                          style: TextStyle(fontSize: 11, color: Colors.grey),
-                        ),
-                      ],
+                    GestureDetector(
+                      onTap: _showCityPicker,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.location_on_rounded, size: 12, color: AppColors.primaryGold),
+                          const SizedBox(width: 3),
+                          Text(
+                            "$_cityName (Tap to change)",
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppColors.primaryGold,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          const Icon(Icons.arrow_drop_down_rounded, size: 14, color: AppColors.primaryGold),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -469,6 +617,78 @@ class _QiblahScreenState extends State<QiblahScreen> with SingleTickerProviderSt
           ),
 
           const SizedBox(height: 20),
+
+          // Interactive Compass Slider & Auto-Align (for web / desktop & manual orientation)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.darkCardBg : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.explore_rounded, color: AppColors.islamicGold, size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          "Rotate Phone: ${_deviceHeading.round()}°",
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: _autoAlign,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [Color(0xFF10B981), Color(0xFF0D9488)]),
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF10B981).withOpacity(0.35),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Auto-Align 🕋",
+                              style: TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Slider(
+                  value: _deviceHeading,
+                  min: 0,
+                  max: 360,
+                  activeColor: isFacing ? const Color(0xFF10B981) : AppColors.islamicGold,
+                  inactiveColor: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
+                  onChanged: (val) => setState(() => _deviceHeading = val),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
 
           // 3-Column Direction Info Card (Heading | Qiblah | GPS from Qiblah.tsx)
           Container(

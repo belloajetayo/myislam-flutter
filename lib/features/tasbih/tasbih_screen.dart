@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/widgets/animated_back_button.dart';
+import '../../data/services/storage_service.dart';
 
 class DhikrPreset {
   final String arabic;
@@ -81,6 +83,36 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
       meaning: "O Allah, send blessings upon Muhammad",
       defaultTarget: 100,
     ),
+    DhikrPreset(
+      arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِٱللَّهِ",
+      transliteration: "La hawla wa la quwwata illa billah",
+      meaning: "There is no might nor power except with Allah",
+      defaultTarget: 100,
+    ),
+    DhikrPreset(
+      arabic: "حَسْبُنَا ٱللَّهُ وَنِعْمَ ٱلْوَكِيلُ",
+      transliteration: "HasbunAllahu wa ni'mal wakeel",
+      meaning: "Sufficient for us is Allah, and He is the best Disposer of affairs",
+      defaultTarget: 33,
+    ),
+    DhikrPreset(
+      arabic: "سُبْحَانَ ٱللَّهِ ٱلْعَظِيمِ وَبِحَمْدِهِ",
+      transliteration: "SubhanAllahil 'Adheemi wa bihamdihi",
+      meaning: "Glory be to Allah the Almighty, and praise be to Him",
+      defaultTarget: 100,
+    ),
+    DhikrPreset(
+      arabic: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ",
+      transliteration: "Ya Hayyu Ya Qayyoom bi-rahmatika astagheeth",
+      meaning: "O Ever-Living, O Sustainer, in Your mercy I seek relief",
+      defaultTarget: 33,
+    ),
+    DhikrPreset(
+      arabic: "رَبِّ ٱغْفِرْ لِي وَتُبْ عَلَيَّ",
+      transliteration: "Rabbi-ghfir li wa tub 'alayya",
+      meaning: "My Lord, forgive me and accept my repentance",
+      defaultTarget: 100,
+    ),
   ];
 
   static const List<int> _targetOptions = [33, 99, 100, 1000];
@@ -114,6 +146,8 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
 
     // Trigger slight spring animation
     _animController.reverse().then((_) => _animController.forward());
+
+    context.read<StorageService>().incrementTasbih();
 
     setState(() {
       _counter++;
@@ -181,6 +215,7 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    final storage = context.watch<StorageService>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final currentDhikr = _dhikrPresets[_selectedDhikrIndex];
     final progress = _selectedTarget > 0 ? (_counter / _selectedTarget).clamp(0.0, 1.0) : 0.0;
@@ -480,15 +515,15 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
 
                 const SizedBox(height: 28),
 
-                // Statistics Row: Laps & Total Count
+                // Statistics Row: Laps, Session, Lifetime Dhikr
                 Row(
                   children: [
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                         decoration: BoxDecoration(
                           color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(18),
                           border: Border.all(
                             color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
                           ),
@@ -496,25 +531,25 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
                         child: Column(
                           children: [
                             const Text(
-                              "COMPLETED LAPS",
+                              "LAPS",
                               style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 0.8, color: Colors.grey),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               "$_laps",
-                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.goldWarm),
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.goldWarm),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                         decoration: BoxDecoration(
                           color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(18),
                           border: Border.all(
                             color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
                           ),
@@ -522,13 +557,39 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
                         child: Column(
                           children: [
                             const Text(
-                              "TOTAL DHIKR TODAY",
+                              "SESSION",
                               style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 0.8, color: Colors.grey),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               "$_totalCount",
-                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.emeraldPrimary),
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.emeraldPrimary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFEEF2FF),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text(
+                              "LIFETIME",
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 0.8, color: Colors.grey),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "${storage.totalTasbih}",
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF6366F1)),
                             ),
                           ],
                         ),
